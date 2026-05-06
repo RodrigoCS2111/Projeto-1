@@ -1,201 +1,224 @@
-# Projeto-1
-Repositório Projeto 1
-# Equipe
+# EcoTransition 🌱⚡
 
-**Eduardo Américo**
-Líder Técnico
+Sistema de apoio à decisão para migração de veículos a combustão para veículos elétricos.
 
-Responsabilidades:
-Define a arquitetura e garante a viabilidade técnica
-Valida a lógica dos cálculos e integrações
-Orienta o desenvolvedor e revisa entregas críticas
-Assegura qualidade, performance e coerência técnica da solução.
-E-mail: eabs2@cesar.school
+---
 
-**Natan Araújo**
-Desenvolvedor
+# 📖 Sobre o Projeto
 
-Responsabilidades:
-Implementar as funcionalidades e interfaces
-Garantir o funcionamento dos cálculos
-Realiza testes e correções contínuas
-Assegura performance e estabilidade do sistema.
+O **EcoTransition** é uma aplicação desenvolvida em Python com o objetivo de auxiliar usuários na tomada de decisão sobre a troca de veículos a combustão por veículos elétricos.
 
-E-mail: nga@cesar.school
+O sistema realiza comparações financeiras e ambientais, utilizando dados fornecidos pelo usuário e valores médios previamente definidos para diferentes categorias de veículos elétricos.
 
-**Rodrigo Carvalho Silva**
-Gerente de Projeto
+A proposta do projeto é tornar a análise mais simples, acessível e compreensível, permitindo que usuários leigos consigam visualizar os impactos econômicos e sustentáveis da mudança de veículo.
 
-Responsabilidades:
-Planeja cronograma, prioridades e entregas
-Garante alinhamento com requisitos e problema investigado
-Facilita comunicação e remove impedimentos
-Acompanha riscos, prazos e prepara materiais de apresentação
+---
 
-E-mail: rcs8@cesar.school
+# 🎯 Objetivo
 
-# Visão Geral
-O EcoTransition é uma ferramenta em Python desenvolvida para ajudar usuários a avaliar se vale a pena trocar um veículo a combustão por um veículo elétrico.
-O sistema realiza comparações financeiras, ambientais e operacionais, apresentando:
+Desenvolver uma ferramenta em Python capaz de:
 
-Economia total e anual
+- Comparar custos entre veículos a combustão e elétricos
+- Estimar economia financeira
+- Calcular impacto ambiental
+- Gerar recomendações inteligentes
+- Auxiliar o usuário na tomada de decisão
 
-Economia de abastecimento e manutenção
+---
 
-Redução de CO₂ e equivalência em árvores
+# 🚀 Funcionalidades
 
-Score de viabilidade (1 a 5)
+## 📊 Calculadora Comparativa
+- Cálculo de custos de combustível e energia
+- Economia anual e total
+- Economia de manutenção
+- Comparação de custo operacional
 
-Recomendação final explicada
+---
 
-Tempo de retorno do investimento (payback)
+## ⭐ Score de Viabilidade
+O sistema gera uma nota de viabilidade de aquisição baseada em:
+- Tempo de retorno do investimento
+- Economia total
+- Perfil do usuário
 
-Histórico de simulações (CRUD)
+---
 
-# Objetivo do Projeto
+## 🧠 Sistema de Recomendação
+Além de informar se vale a pena ou não realizar a troca, o sistema também explica os principais fatores que influenciaram a decisão.
 
-O objetivo é fornecer uma solução simples, funcional e acessível em ambiente de terminal, permitindo que qualquer usuário — mesmo leigo — consiga entender os impactos financeiros e ambientais da troca de veículo.
+Exemplo:
+> “Vale a pena devido à alta quilometragem mensal e ao elevado custo atual com combustível.”
 
-# Principais funcionalidades
+---
 
-**Calculadora de Comparação**
+## 🌱 Impacto Ambiental
+- Estimativa de redução de emissão de CO₂
+- Equivalência em árvores preservadas
 
-Cálculo de custos de combustível e energia
+---
 
-Economia anual e total
+## 👤 Perfil do Usuário
+Classificação automática baseada nas escolhas do usuário:
+- Econômico
+- Sustentável
+- Equilibrado
 
-Economia de manutenção
+---
 
-Redução de CO₂ e equivalência em árvores
+## 💾 Histórico de Simulações (CRUD)
+O sistema permite:
+- Salvar simulações
+- Visualizar histórico
+- Atualizar simulações
+- Excluir simulações
 
-**Score de Viabilidade**
+---
 
-Nota de 1 a 5 baseada nos resultados
+# 📥 Informações Utilizadas
 
-Explicação dos fatores que influenciaram a nota
+O sistema utiliza informações financeiras e operacionais do veículo do usuário, como:
 
-**Sistema de Recomendação Explicada**
+- Custos de combustível e energia
+- Quilometragem mensal
+- Consumo do veículo
+- Custos anuais
+- Categoria do veículo elétrico
 
-Indica se vale a pena trocar
+---
 
-Justifica com base no perfil e nos dados do usuário
+# 📤 Resultados Gerados
 
-**Classificação do Perfil do Usuário**
+O sistema apresenta:
 
-Econômico
+- Economia financeira
+- Tempo de retorno do investimento
+- Score de viabilidade
+- Recomendação personalizada
+- Impacto ambiental
 
-Sustentável
+---
 
-Indeciso
+# 🛠 Tecnologias Utilizadas
 
-**Histórico de Simulações (CRUD)**
+- Python
+- JSON
+- Figma
+- Git & GitHub
 
-Salvar
+---
 
-Visualizar
+# 🧱 Estrutura do Projeto
 
-Atualizar
+EcoTransition/
+│
+├── database/
+│   └── simulacoes.json
+│
+├── main.py
+├── calculos.py
+├── crud.py
+├── dados.py
+└── validacoes.py
 
-Excluir
+# 🔄 Fluxo de Funcionamento
 
-**Cálculo de Payback**
+```plaintext
+Usuário → Entrada de Dados → Processamento →
+Resultados → Recomendação → Histórico
+```
 
-Estima em quantos anos o investimento no carro elétrico se paga
+---
 
-# Dados de entrada
+# 🖥 Como Executar o Projeto
 
-Preço do carro atual
+## 1. Clone o repositório
 
-Preço da gasolina
+```bash
+git clone https://github.com/RodrigoCS2111/Projeto-1.git
+```
 
-Preço da energia
+---
 
-Quilometragem mensal
+## 2. Acesse a pasta do projeto
 
-Consumo do veículo (km/L)
+```bash
+cd EcoTransition
+```
 
-Categoria do veículo elétrico (popular, intermediário, SUV)
+---
 
-Prioridade (econômica, ambiental, equilibrada)
+## 3. Execute o sistema
 
-IPVA, seguro e manutenção
+```bash
+python main.py
+```
 
-Quantidade de anos para simulação
+---
 
-# Dados de saída
+# 🎨 Protótipo
 
-Economia geral (anual e total)
+O protótipo da interface foi desenvolvido no Figma, contemplando:
 
-Economia de abastecimento
+- Home
+- Menu principal
+- Entrada de dados
+- Resultado da análise
+- Recomendação
+- Impacto ambiental
+- CRUD de simulações
 
-Economia de manutenção
+---
 
-Custo para abastecer o tanque
+# 👥 Equipe
 
-Custo para carregar a bateria
+## Eduardo Américo — Líder Técnico
 
-Redução de CO₂
+Responsável por:
 
-Equivalência em árvores
+- Arquitetura do sistema
+- Modelagem lógica
+- Integração dos módulos
+- Revisão técnica
+- Garantia da viabilidade da solução
 
-Score de viabilidade
+📧 eabs2@cesar.school
 
-Recomendação final explicada
+---
 
-Tempo de retorno do investimento
+## Natan Araújo — Desenvolvedor
 
-# Requisitos funcionais (Resumo)
+Responsável por:
 
-Entrada de dados do usuário
+- Desenvolvimento das funcionalidades
+- Implementação dos cálculos
+- Testes e correções
+- Estabilidade do sistema
 
-Seleção de categoria do veículo elétrico
+📧 nga@cesar.school
 
-Uso de valores médios pré-definidos
+---
 
-Cálculo de custos, economia, CO₂ e payback
+## Rodrigo Carvalho Silva — Gerente de Projeto
 
-Geração de score e recomendação
+Responsável por:
 
-Classificação do perfil
+- Planejamento do projeto
+- Organização das entregas
+- Gestão de cronograma
+- Comunicação da equipe
+- Preparação da apresentação
 
-CRUD de simulações
+📧 rcs8@cesar.school
 
-Armazenamento em JSON
+---
 
-# Requisitos não funcionais
+# 📌 Status do Projeto
 
-Desenvolvido em Python
+🚧 Em desenvolvimento
 
-Interface via terminal
+---
 
-Respostas rápidas e claras
+# 🌍 Impacto Esperado
 
-Código organizado e fácil de manter
-
-Tratamento de erros
-
-Dados armazenados em JSON
-
-# Fluxo de funcionamento
-
-1. Identificação do usuário
-
-2. Menu principal
-
-Nova simulação
-
-Visualizar simulações
-
-Sair
-
-3. Entrada de dados
-
-4. Processamento dos cálculos
-
-5. Exibição dos resultados
-
-6. Opção de salvar simulação
-
-7. Gerenciamento de simulações (CRUD)
-
-8. Encerramento
+O EcoTransition busca incentivar decisões mais conscientes relacionadas à mobilidade sustentável, contribuindo para a transição energética e para a redução do impacto ambiental causado por veículos a combustão.
