@@ -48,6 +48,7 @@ Desenvolver uma ferramenta em Python capaz de:
 
 # 🧱 Estrutura do Projeto
 
+```plaintext
 EcoTransition/
 │
 ├── database/
@@ -58,6 +59,8 @@ EcoTransition/
 ├── crud.py
 ├── dados.py
 └── validacoes.py
+
+---
 
 # 🔄 Fluxo de Funcionamento
 
@@ -99,17 +102,17 @@ Acesse o protótipo desenvolvido no Figma:
 
 # 👥 Equipe
 
-## Eduardo Américo — Líder Técnico
+- Eduardo Américo — Líder Técnico
 
 📧 eabs2@cesar.school
 ---
 
-## Natan Araújo — Desenvolvedor
+- Natan Araújo — Desenvolvedor
 
 📧 nga@cesar.school
 ---
 
-## Rodrigo Carvalho Silva — Gerente de Projeto 
+- Rodrigo Carvalho Silva — Gerente de Projeto 
 
 📧 rcs8@cesar.school
 ---
