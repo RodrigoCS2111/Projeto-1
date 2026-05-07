@@ -1,10 +1,10 @@
-# EcoTransition 🌱⚡
+# EcoTransition 
 
 Sistema de apoio à decisão para migração de veículos a combustão para veículos elétricos.
 
 ---
 
-# 📖 Sobre o Projeto
+#  Sobre o Projeto
 
 O **EcoTransition** é uma aplicação desenvolvida em Python com o objetivo de auxiliar usuários na tomada de decisão sobre a troca de veículos a combustão por veículos elétricos.
 
@@ -14,7 +14,7 @@ A proposta do projeto é tornar essa análise mais simples, acessível e compree
 
 ---
 
-# 🎯 Objetivo
+#  Objetivo
 
 Desenvolver uma ferramenta em Python capaz de:
 
@@ -26,7 +26,7 @@ Desenvolver uma ferramenta em Python capaz de:
 
 ---
 
-# 🚀 Funcionalidades
+#  Funcionalidades
 
 - 📊 Calculadora Comparativa
 - ⭐ Score de Viabilidade
@@ -37,7 +37,7 @@ Desenvolver uma ferramenta em Python capaz de:
 
 ---
 
-# 🛠 Tecnologias Utilizadas
+# Tecnologias Utilizadas
 
 - Python
 - JSON
@@ -46,7 +46,7 @@ Desenvolver uma ferramenta em Python capaz de:
 
 ---
 
-# 🧱 Estrutura do Projeto
+# Estrutura do Projeto
 
 ```plaintext
 EcoTransition/
@@ -59,11 +59,11 @@ EcoTransition/
 ├── crud.py
 ├── dados.py
 └── validacoes.py
+```
 
 ---
 
-# 🔄 Fluxo de Funcionamento
-
+# Fluxo de Funcionamento
 ```plaintext
 Usuário → Entrada de Dados → Processamento →
 Resultados → Recomendação → Histórico
@@ -71,7 +71,7 @@ Resultados → Recomendação → Histórico
 
 ---
 
-# 🖥 Como Executar o Projeto
+# Como Executar o Projeto
 
 ## 1. Clone o repositório
 
@@ -93,14 +93,14 @@ python main.py
 
 ---
 
-# 🎨 Protótipo
+# Protótipo
 
 Acesse o protótipo desenvolvido no Figma:
 
 [🔗 Visualizar Protótipo](https://www.figma.com/proto/zQ2QYnNcjxNp1Wwr05eNWu/Prot%C3%B3tipo-EcoTransition?node-id=1-2&starting-point-node-id=1%3A2&t=b0dwuve5gpCmyJI3-1)
 ---
 
-# 👥 Equipe
+# Equipe
 
 - Eduardo Américo — Líder Técnico
 
