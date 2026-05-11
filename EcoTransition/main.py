@@ -4,47 +4,38 @@ from calculos import calcular_combustao, calcular_eletrico, calcular_economia, c
 from dados import CARROS_ELETRICOS, FATOR_CO2_GASOLINA, FATOR_ARVORE
 from validacoes import ler_float, ler_int, ler_nome, ler_opcao
 
+Combustao = calcular_combustao(
+    
+    quilometragem_mensal = 1100,
+    consumo_km_l = 13,
+    preco_gasolina =6.75,
+    ipva = 3000,
+    seguro = 2000,
+    manutencao_anual_combustao = 1500,
+    anos = 5       
+)
 
-def coletar_dados_simulacao():
-    print("\n=== DADOS DA SIMULAÇÃO ===\n")
-
-    preco_carro_atual = ler_float("Preço do carro atual (R$): ")
-    preco_gasolina = ler_float("Preço da gasolina (R$/L): ")
-    preco_energia = ler_float("Preço da energia (R$/kWh): ")
-    quilometragem_mensal = ler_float("Quilometragem mensal (km): ")
-    consumo_km_l = ler_float("Consumo do veículo a combustão (km/L): ")
-
-    categoria_veiculo = ler_opcao(
-        "Categoria do veículo elétrico desejado (popular/suv/luxo): ",
-        ["popular", "suv", "luxo"]
-    )
-
-    prioridade_usuario = ler_opcao(
-        "Sua prioridade (economia/sustentabilidade/equilibrio): ",
-        ["economia", "sustentabilidade", "equilibrio"]
-    )
-
-    ipva = ler_float("IPVA anual (R$): ")
-    seguro = ler_float("Seguro anual (R$): ")
-    manutencao_anual_combustao = ler_float("Manutenção anual do carro atual (R$): ")
-    anos = ler_int("Quantidade de anos para simulação: ")
-
-    return {
-        "preco_carro_atual": preco_carro_atual,
-        "preco_gasolina": preco_gasolina,
-        "preco_energia": preco_energia,
-        "quilometragem_mensal": quilometragem_mensal,
-        "consumo_km_l": consumo_km_l,
-        "categoria_veiculo": categoria_veiculo,
-        "prioridade_usuario": prioridade_usuario,
-        "ipva": ipva,
-        "seguro": seguro,
-        "manutencao_anual_combustao": manutencao_anual_combustao,
-        "anos": anos
-    }
+eletrico = calcular_eletrico(
+    quilometragem_mensal = 1100,
+    preco_energia = 0.90,
+    categoria_veiculo = "suv",
+    ipva = 3000,
+    seguro = 2000,
+    anos = 5,
+    carros_eletricos = CARROS_ELETRICOS
+)
 
 
-# Teste temporário
-dados = coletar_dados_simulacao()
-print("\nDados coletados:")
-print(dados)
+economia = calcular_economia(
+    custo_combustivel_anual = Combustao["custo_combustivel_anual"],
+    custo_eletrico_anual = eletrico["custo_eletrico_anual"],
+    custo_total_combustao = Combustao["custo_total_combustao"], 
+    custo_total_eletrico =eletrico["custo_total_eletrico"], 
+    manutencao_anual_combustao = 1500, 
+    manutencao_anual_eletrico =eletrico["manutencao_anual_eletrico"] , 
+    preco_carro_atual = 110000, 
+    preco_carro_eletrico =eletrico["preco_carro_eletrico"], 
+    anos = 5
+)
+
+print(economia)

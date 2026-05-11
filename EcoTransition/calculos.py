@@ -52,9 +52,9 @@ def calcular_economia(custo_combustivel_anual,custo_eletrico_anual,custo_total_c
 
     diferenca_investimento = preco_carro_eletrico - preco_carro_atual
 
-    economia_total = custo_total_combustao - custo_total_eletrico ## Analisar se vai manter esse cálculo
+    economia_total = custo_total_combustao - custo_total_eletrico 
 
-    economia_real = economia_total - diferenca_investimento
+    economia_real = economia_total - diferenca_investimento ## Analisar se vai manter esse cálculo
 
     economia_anual = economia_total / anos
 
