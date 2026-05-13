@@ -52,7 +52,19 @@ def ler_nome(mensagem):
         else:
             return texto
 
+def ler_email(mensagem):
+    while True:
+        email = input(mensagem).strip().lower()
 
+        if email == "":
+            print("Este campo não pode ficar vazio.")
+
+        elif "@" not in email or "." not in email:
+            print("Digite um e-mail válido.")
+
+        else:
+            return email
+        
 def ler_opcao(mensagem, opcoes_validas):
     while True:
         opcao = input(mensagem).strip().lower()

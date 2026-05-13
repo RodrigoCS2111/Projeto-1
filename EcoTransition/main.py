@@ -2,8 +2,7 @@
 # Responsável por iniciar o programa, exibir menus e conectar todas as funcionalidades.
 from calculos import calcular_combustao, calcular_eletrico, calcular_economia, calcular_impacto_ambiental, calcular_score, gerar_recomendacao
 from dados import CARROS_ELETRICOS, FATOR_CO2_GASOLINA, FATOR_ARVORE
-from validacoes import ler_float, ler_int, ler_nome, ler_opcao
-
+from validacoes import ler_float, ler_int, ler_nome, ler_opcao, ler_email
 
 def coletar_dados_simulacao():
     print("\n=== DADOS DA SIMULAÇÃO ===\n")
@@ -43,7 +42,127 @@ def coletar_dados_simulacao():
         "anos": anos
     }
 
+def identificar_usuario():
+    print("\n=== IDENTIFICAÇÃO DO USUÁRIO ===\n")
 
-dados = coletar_dados_simulacao()
-print("\nDados coletados:")
-print(dados)
+    nome = ler_nome("Digite seu nome: ")
+    email = ler_email("Digite seu e-mail: ")
+
+    return {
+        "nome": nome,
+        "email": email
+    }
+    
+def menu_principal(usuario):
+    while True:
+        print("\n=== MENU PRINCIPAL ===")
+        print(f"Usuário: {usuario['nome']} | {usuario['email']}")
+        print("1 - Nova simulação")
+        print("2 - Ver histórico")
+        print("3 - Sair")
+
+        opcao = ler_opcao("Escolha uma opção: ", ["1", "2", "3"])
+
+        if opcao == "1":
+            simulacao = executar_simulacao(usuario)
+            print("\nSimulação finalizada com sucesso!")
+
+        elif opcao == "2":
+            print("\nHistórico ainda será implementado na etapa de CRUD.")
+
+        elif opcao == "3":
+            print("\nEncerrando o EcoTransition. Até logo!")
+            break
+
+def executar_simulacao(usuario):
+    dados = coletar_dados_simulacao()
+
+    combustao = calcular_combustao(
+        quilometragem_mensal=dados["quilometragem_mensal"],
+        consumo_km_l=dados["consumo_km_l"],
+        preco_gasolina=dados["preco_gasolina"],
+        ipva=dados["ipva"],
+        seguro=dados["seguro"],
+        manutencao_anual_combustao=dados["manutencao_anual_combustao"],
+        anos=dados["anos"]
+    )
+
+    eletrico = calcular_eletrico(
+        quilometragem_mensal=dados["quilometragem_mensal"],
+        preco_energia=dados["preco_energia"],
+        categoria_veiculo=dados["categoria_veiculo"],
+        ipva=dados["ipva"],
+        seguro=dados["seguro"],
+        anos=dados["anos"],
+        carros_eletricos=CARROS_ELETRICOS
+    )
+
+    economia = calcular_economia(
+        custo_combustivel_anual=combustao["custo_combustivel_anual"],
+        custo_eletrico_anual=eletrico["custo_eletrico_anual"],
+        custo_total_combustao=combustao["custo_total_combustao"],
+        custo_total_eletrico=eletrico["custo_total_eletrico"],
+        manutencao_anual_combustao=dados["manutencao_anual_combustao"],
+        manutencao_anual_eletrico=eletrico["manutencao_anual_eletrico"],
+        preco_carro_atual=dados["preco_carro_atual"],
+        preco_carro_eletrico=eletrico["preco_carro_eletrico"],
+        anos=dados["anos"]
+    )
+
+    impacto = calcular_impacto_ambiental(
+        litros_por_mes=combustao["litros_por_mes"],
+        anos=dados["anos"],
+        fator_co2_gasolina=FATOR_CO2_GASOLINA,
+        fator_arvore=FATOR_ARVORE
+    )
+
+    score = calcular_score(economia["tempo_retorno"])
+
+    recomendacao = gerar_recomendacao(
+        score_viabilidade=score,
+        quilometragem_mensal=dados["quilometragem_mensal"],
+        preco_gasolina=dados["preco_gasolina"],
+        economia_anual=economia["economia_anual"],
+        tempo_retorno=economia["tempo_retorno"]
+    )
+    
+    simulacao = {
+        "usuario": usuario,
+        "entradas": dados,
+        "resultados": {
+            "combustao": combustao,
+            "eletrico": eletrico,
+            "economia": economia,
+            "impacto_ambiental": impacto,
+            "recomendacao": recomendacao
+        }
+    }
+
+    print("\n=== RESULTADO DA SIMULAÇÃO ===\n")
+    print(f"Custo anual com combustível: R$ {combustao['custo_combustivel_anual']:.2f}")
+    print(f"Custo anual com energia: R$ {eletrico['custo_eletrico_anual']:.2f}")
+    print(f"Economia anual estimada: R$ {economia['economia_anual']:.2f}")
+    print(f"Economia total no período: R$ {economia['economia_total']:.2f}")
+    print(f"Economia real considerando investimento: R$ {economia['economia_real']:.2f}")
+
+    if economia["tempo_retorno"] == -1:
+        print("Tempo de retorno: não se paga no período analisado")
+    else:
+        print(f"Tempo de retorno: {economia['tempo_retorno']:.1f} anos")
+
+    print(f"Redução estimada de CO₂: {impacto['economia_co2']:.2f} kg")
+    print(f"Equivalente a aproximadamente {impacto['equivalencia_arvores']:.0f} árvores")
+    print(f"Score de viabilidade: {recomendacao['score_viabilidade']}/5")
+    print(f"Recomendação: {recomendacao['recomendacao']}")
+
+    print("\nPrincipais fatores:")
+    if recomendacao["fatores"]:
+        for fator in recomendacao["fatores"]:
+            print(f"- {fator}")
+    else:
+        print("- Nenhum fator de destaque identificado.")
+    return simulacao
+
+if __name__ == "__main__":
+    usuario = identificar_usuario()
+    menu_principal(usuario)
