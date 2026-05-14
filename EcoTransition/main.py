@@ -3,6 +3,7 @@
 from calculos import calcular_combustao, calcular_eletrico, calcular_economia, calcular_impacto_ambiental, calcular_score, gerar_recomendacao
 from dados import CARROS_ELETRICOS, FATOR_CO2_GASOLINA, FATOR_ARVORE
 from validacoes import ler_float, ler_int, ler_nome, ler_opcao, ler_email
+from crud import adicionar_simulacao, carregar_simulacoes, salvar_simulacoes, listar_simulacoes_usuario
 
 def coletar_dados_simulacao():
     print("\n=== DADOS DA SIMULAÇÃO ===\n")
@@ -64,19 +65,38 @@ def menu_principal(usuario):
         opcao = ler_opcao("Escolha uma opção: ", ["1", "2", "3"])
 
         if opcao == "1":
-            simulacao = executar_simulacao(usuario)
-            print("\nSimulação finalizada com sucesso!")
+         simulacao = executar_simulacao(usuario)
+
+         salvar = ler_opcao("\nDeseja salvar esta simulação? (s/n): ",["s", "n"])
+
+         if salvar == "s":
+          adicionar_simulacao(simulacao)
+          print("\nSimulação salva com sucesso!")
+         else:
+          print("\nSimulação não foi salva.")
+
+          print("\nSimulação finalizada com sucesso!")
 
         elif opcao == "2":
-            print("\nHistórico ainda será implementado na etapa de CRUD.")
+         historico = listar_simulacoes_usuario(usuario["email"])
+
+         print("\n=== HISTÓRICO DE SIMULAÇÕES ===")
+ 
+         if not historico:
+            print("Nenhuma simulação encontrada.")
+            
+         else:
+           for simulacao in historico:
+            print(f"\nID: {simulacao['id']}")
+            print(f"Categoria: {simulacao['entradas']['categoria_veiculo']}")
+            print(f"Economia total: R$ {simulacao['resultados']['economia']['economia_total']:.2f}")
+            print(f"Score: {simulacao['resultados']['recomendacao']['score_viabilidade']}/5")
 
         elif opcao == "3":
             print("\nEncerrando o EcoTransition. Até logo!")
             break
 
-def executar_simulacao(usuario):
-    dados = coletar_dados_simulacao()
-
+def processar_simulacao(usuario, dados):
     combustao = calcular_combustao(
         quilometragem_mensal=dados["quilometragem_mensal"],
         consumo_km_l=dados["consumo_km_l"],
@@ -125,7 +145,7 @@ def executar_simulacao(usuario):
         economia_anual=economia["economia_anual"],
         tempo_retorno=economia["tempo_retorno"]
     )
-    
+
     simulacao = {
         "usuario": usuario,
         "entradas": dados,
@@ -137,6 +157,18 @@ def executar_simulacao(usuario):
             "recomendacao": recomendacao
         }
     }
+
+    return simulacao
+
+def executar_simulacao(usuario):
+    dados = coletar_dados_simulacao()
+    simulacao = processar_simulacao(usuario, dados)
+
+    combustao = simulacao["resultados"]["combustao"]
+    eletrico = simulacao["resultados"]["eletrico"]
+    economia = simulacao["resultados"]["economia"]
+    impacto = simulacao["resultados"]["impacto_ambiental"]
+    recomendacao = simulacao["resultados"]["recomendacao"]
 
     print("\n=== RESULTADO DA SIMULAÇÃO ===\n")
     print(f"Custo anual com combustível: R$ {combustao['custo_combustivel_anual']:.2f}")
@@ -161,6 +193,7 @@ def executar_simulacao(usuario):
             print(f"- {fator}")
     else:
         print("- Nenhum fator de destaque identificado.")
+
     return simulacao
 
 if __name__ == "__main__":

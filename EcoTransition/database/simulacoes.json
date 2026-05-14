@@ -1,1 +1,61 @@
-[]
+[
+    {
+        "usuario": {
+            "nome": "Dudu",
+            "email": "du@gmail.com"
+        },
+        "entradas": {
+            "preco_carro_atual": 140000.0,
+            "preco_gasolina": 5.5,
+            "preco_energia": 0.23,
+            "quilometragem_mensal": 1350.0,
+            "consumo_km_l": 12.5,
+            "categoria_veiculo": "popular",
+            "prioridade_usuario": "economia",
+            "ipva": 2500.0,
+            "seguro": 3000.0,
+            "manutencao_anual_combustao": 1200.0,
+            "anos": 4
+        },
+        "resultados": {
+            "combustao": {
+                "litros_por_mes": 108.0,
+                "custo_combustivel_mensal": 594.0,
+                "custo_combustivel_anual": 7128.0,
+                "custo_total_combustao": 55312.0
+            },
+            "eletrico": {
+                "consumo_kwh_categoria": 0.12,
+                "preco_carro_eletrico": 120000.0,
+                "manutencao_anual_eletrico": 1500.0,
+                "custo_eletrico_mensal": 37.260000000000005,
+                "custo_eletrico_anual": 447.12000000000006,
+                "custo_total_eletrico": 29788.48
+            },
+            "economia": {
+                "economia_abastecimento_anual": 6680.88,
+                "economia_manutencao_anual": -300.0,
+                "diferenca_investimento": -20000.0,
+                "economia_total": 25523.52,
+                "economia_real": 45523.520000000004,
+                "economia_anual": 6380.88,
+                "tempo_retorno": -3.1343639121876605
+            },
+            "impacto_ambiental": {
+                "co2_combustao_total": 11923.199999999999,
+                "co2_eletrico_total": 0,
+                "economia_co2": 11923.199999999999,
+                "equivalencia_arvores": 567.7714285714285
+            },
+            "recomendacao": {
+                "score_viabilidade": 5,
+                "recomendacao": "Vale muito a pena realizar a troca.",
+                "fatores": [
+                    "Economia anual significativa",
+                    "Retorno rápido do investimento"
+                ]
+            }
+        },
+        "id": 1
+    }
+]
