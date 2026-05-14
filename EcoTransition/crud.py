@@ -39,3 +39,26 @@ def listar_simulacoes_usuario(email):
             simulacoes_usuario.append(simulacao)
 
     return simulacoes_usuario
+
+def atualizar_simulacao(email, id_simulacao, nova_simulacao):
+    simulacoes = carregar_simulacoes()
+
+    for indice, simulacao in enumerate(simulacoes):
+        if simulacao["id"] == id_simulacao and simulacao["usuario"]["email"] == email:
+            nova_simulacao["id"] = id_simulacao
+            simulacoes[indice] = nova_simulacao
+            salvar_simulacoes(simulacoes)
+            return True
+
+    return False
+
+def excluir_simulacao(email, id_simulacao):
+    simulacoes = carregar_simulacoes()
+
+    for simulacao in simulacoes:
+        if simulacao["id"] == id_simulacao and simulacao["usuario"]["email"] == email:
+            simulacoes.remove(simulacao)
+            salvar_simulacoes(simulacoes)
+            return True
+
+    return False

@@ -57,5 +57,64 @@
             }
         },
         "id": 1
+    },
+    {
+        "usuario": {
+            "nome": "Natan",
+            "email": "natan@gmail.com"
+        },
+        "entradas": {
+            "preco_carro_atual": 130000.0,
+            "preco_gasolina": 6.5,
+            "preco_energia": 0.75,
+            "quilometragem_mensal": 1350.0,
+            "consumo_km_l": 12.0,
+            "categoria_veiculo": "suv",
+            "prioridade_usuario": "sustentabilidade",
+            "ipva": 2000.0,
+            "seguro": 5000.0,
+            "manutencao_anual_combustao": 2300.0,
+            "anos": 10
+        },
+        "resultados": {
+            "combustao": {
+                "litros_por_mes": 112.5,
+                "custo_combustivel_mensal": 731.25,
+                "custo_combustivel_anual": 8775.0,
+                "custo_total_combustao": 180750.0
+            },
+            "eletrico": {
+                "consumo_kwh_categoria": 0.2,
+                "preco_carro_eletrico": 185000.0,
+                "manutencao_anual_eletrico": 2500.0,
+                "custo_eletrico_mensal": 202.5,
+                "custo_eletrico_anual": 2430.0,
+                "custo_total_eletrico": 119300.0
+            },
+            "economia": {
+                "economia_abastecimento_anual": 6345.0,
+                "economia_manutencao_anual": -200.0,
+                "diferenca_investimento": 55000.0,
+                "economia_total": 61450.0,
+                "economia_real": 6450.0,
+                "economia_anual": 6145.0,
+                "tempo_retorno": 8.950366151342555
+            },
+            "impacto_ambiental": {
+                "co2_combustao_total": 31050.0,
+                "co2_eletrico_total": 0,
+                "economia_co2": 31050.0,
+                "equivalencia_arvores": 1478.5714285714287
+            },
+            "recomendacao": {
+                "score_viabilidade": 2,
+                "recomendacao": "A troca é pouco vantajosa financeiramente no período analisado.",
+                "fatores": [
+                    "Alto custo da gasolina",
+                    "Economia anual significativa"
+                ]
+            }
+        },
+        "id": 2
     }
 ]

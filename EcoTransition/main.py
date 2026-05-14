@@ -3,7 +3,7 @@
 from calculos import calcular_combustao, calcular_eletrico, calcular_economia, calcular_impacto_ambiental, calcular_score, gerar_recomendacao
 from dados import CARROS_ELETRICOS, FATOR_CO2_GASOLINA, FATOR_ARVORE
 from validacoes import ler_float, ler_int, ler_nome, ler_opcao, ler_email
-from crud import adicionar_simulacao, carregar_simulacoes, salvar_simulacoes, listar_simulacoes_usuario
+from crud import adicionar_simulacao, listar_simulacoes_usuario, atualizar_simulacao, excluir_simulacao
 
 def coletar_dados_simulacao():
     print("\n=== DADOS DA SIMULAÇÃO ===\n")
@@ -75,23 +75,11 @@ def menu_principal(usuario):
          else:
           print("\nSimulação não foi salva.")
 
-          print("\nSimulação finalizada com sucesso!")
+         print("\nSimulação finalizada com sucesso!")
 
         elif opcao == "2":
-         historico = listar_simulacoes_usuario(usuario["email"])
-
-         print("\n=== HISTÓRICO DE SIMULAÇÕES ===")
- 
-         if not historico:
-            print("Nenhuma simulação encontrada.")
-            
-         else:
-           for simulacao in historico:
-            print(f"\nID: {simulacao['id']}")
-            print(f"Categoria: {simulacao['entradas']['categoria_veiculo']}")
-            print(f"Economia total: R$ {simulacao['resultados']['economia']['economia_total']:.2f}")
-            print(f"Score: {simulacao['resultados']['recomendacao']['score_viabilidade']}/5")
-
+         menu_historico(usuario)
+         
         elif opcao == "3":
             print("\nEncerrando o EcoTransition. Até logo!")
             break
@@ -195,6 +183,144 @@ def executar_simulacao(usuario):
         print("- Nenhum fator de destaque identificado.")
 
     return simulacao
+
+def menu_historico(usuario):
+    historico = listar_simulacoes_usuario(usuario["email"])
+
+    print("\n=== HISTÓRICO DE SIMULAÇÕES ===")
+
+    if not historico:
+        print("Nenhuma simulação encontrada.")
+        return
+
+    for simulacao in historico:
+        print(f"\nID: {simulacao['id']}")
+        print(f"Categoria: {simulacao['entradas']['categoria_veiculo']}")
+        print(f"Economia total: R$ {simulacao['resultados']['economia']['economia_total']:.2f}")
+        print(f"Score: {simulacao['resultados']['recomendacao']['score_viabilidade']}/5")
+
+    id_simulacao = ler_int("\nDigite o ID da simulação que deseja gerenciar: ")
+
+    simulacao_escolhida = None
+
+    for simulacao in historico:
+        if simulacao["id"] == id_simulacao:
+            simulacao_escolhida = simulacao
+            break
+
+    if simulacao_escolhida is None:
+        print("\nSimulação não encontrada.")
+        return
+
+    print("\n=== GERENCIAR SIMULAÇÃO ===")
+    print("1 - Ver detalhes")
+    print("2 - Editar simulação")
+    print("3 - Excluir simulação")
+    print("4 - Voltar")
+
+    opcao = ler_opcao("Escolha uma opção: ", ["1", "2", "3", "4"])
+
+    if opcao == "1":
+        ver_detalhes_simulacao(simulacao_escolhida)
+
+    elif opcao == "2":
+        editar_simulacao(usuario, simulacao_escolhida)
+
+    elif opcao == "3":
+        confirmar = ler_opcao("Tem certeza que deseja excluir? (s/n): ", ["s", "n"])
+
+        if confirmar == "s":
+            sucesso = excluir_simulacao(usuario["email"], id_simulacao)
+
+            if sucesso:
+                print("\nSimulação excluída com sucesso!")
+            else:
+                print("\nErro ao excluir simulação.")
+        else:
+            print("\nExclusão cancelada.")
+
+    elif opcao == "4":
+        return
+    
+def ver_detalhes_simulacao(simulacao):
+    entradas = simulacao["entradas"]
+    economia = simulacao["resultados"]["economia"]
+    impacto = simulacao["resultados"]["impacto_ambiental"]
+    recomendacao = simulacao["resultados"]["recomendacao"]
+
+    print("\n=== DETALHES DA SIMULAÇÃO ===")
+    print(f"Categoria: {entradas['categoria_veiculo']}")
+    print(f"Quilometragem mensal: {entradas['quilometragem_mensal']} km")
+    print(f"Preço da gasolina: R$ {entradas['preco_gasolina']:.2f}")
+    print(f"Preço da energia: R$ {entradas['preco_energia']:.2f}")
+    print(f"Anos simulados: {entradas['anos']}")
+
+    print("\n--- Resultados ---")
+    print(f"Economia anual: R$ {economia['economia_anual']:.2f}")
+    print(f"Economia total: R$ {economia['economia_total']:.2f}")
+    print(f"Economia real: R$ {economia['economia_real']:.2f}")
+
+    if economia["tempo_retorno"] == -1:
+        print("Tempo de retorno: não se paga")
+    else:
+        print(f"Tempo de retorno: {economia['tempo_retorno']:.1f} anos")
+
+    print(f"CO₂ evitado: {impacto['economia_co2']:.2f} kg")
+    print(f"Equivalência em árvores: {impacto['equivalencia_arvores']:.0f}")
+    print(f"Score: {recomendacao['score_viabilidade']}/5")
+    print(f"Recomendação: {recomendacao['recomendacao']}")
+
+def editar_simulacao(usuario, simulacao_escolhida):
+    id_simulacao = simulacao_escolhida["id"]
+
+    dados = simulacao_escolhida["entradas"].copy()
+
+    print("\n=== EDITAR SIMULAÇÃO ===")
+
+    print("\nO que deseja alterar?")
+    print("1 - Preço da gasolina")
+    print("2 - Preço da energia")
+    print("3 - Quilometragem mensal")
+    print("4 - Categoria do veículo")
+    print("5 - Quantidade de anos")
+    print("6 - Cancelar")
+
+    opcao = ler_opcao("Escolha uma opção: ", ["1", "2", "3", "4", "5", "6"])
+
+    if opcao == "1":
+        dados["preco_gasolina"] = ler_float("Novo preço da gasolina (R$/L): ")
+
+    elif opcao == "2":
+        dados["preco_energia"] = ler_float("Novo preço da energia (R$/kWh): ")
+
+    elif opcao == "3":
+        dados["quilometragem_mensal"] = ler_float("Nova quilometragem mensal (km): ")
+
+    elif opcao == "4":
+        dados["categoria_veiculo"] = ler_opcao(
+            "Nova categoria (popular/suv/luxo): ",
+            ["popular", "suv", "luxo"]
+        )
+
+    elif opcao == "5":
+        dados["anos"] = ler_int("Nova quantidade de anos para simulação: ")
+
+    elif opcao == "6":
+        print("\nEdição cancelada.")
+        return
+
+    nova_simulacao = processar_simulacao(usuario, dados)
+
+    sucesso = atualizar_simulacao(
+        email=usuario["email"],
+        id_simulacao=id_simulacao,
+        nova_simulacao=nova_simulacao
+    )
+
+    if sucesso:
+        print("\nSimulação atualizada com sucesso!")
+    else:
+        print("\nErro ao atualizar simulação.")
 
 if __name__ == "__main__":
     usuario = identificar_usuario()
