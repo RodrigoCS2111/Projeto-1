@@ -4,7 +4,7 @@ from calculos import calcular_combustao, calcular_eletrico, calcular_economia, c
 from dados import CARROS_ELETRICOS, FATOR_CO2_GASOLINA, FATOR_ARVORE
 from validacoes import ler_float, ler_int, ler_nome, ler_opcao, ler_email
 from crud import adicionar_simulacao, listar_simulacoes_usuario, atualizar_simulacao, excluir_simulacao
-from interface import mostrar_titulo, pausar, loading, mostrar_resultado_simulacao, limpar_tela
+from interface import mostrar_titulo, pausar, loading, mostrar_resultado_simulacao, limpar_tela, formatar_moeda
 
 
 def coletar_dados_simulacao():
@@ -193,7 +193,7 @@ def menu_historico(usuario):
         for simulacao in historico:
             print(f"\nID: {simulacao['id']}")
             print(f"Categoria: {simulacao['entradas']['categoria_veiculo']}")
-            print(f"Economia total: R$ {simulacao['resultados']['economia']['economia_total']:.2f}")
+            print(f"Economia total: {formatar_moeda(simulacao['resultados']['economia']['economia_total'])}")
             print(f"Score: {simulacao['resultados']['recomendacao']['score_viabilidade']}/5")
 
         print("\n1 - Gerenciar simulação")
@@ -265,14 +265,14 @@ def ver_detalhes_simulacao(simulacao):
     mostrar_titulo("DETALHES DA SIMULAÇÃO")
     print(f"Categoria: {entradas['categoria_veiculo']}")
     print(f"Quilometragem mensal: {entradas['quilometragem_mensal']} km")
-    print(f"Preço da gasolina: R$ {entradas['preco_gasolina']:.2f}")
-    print(f"Preço da energia: R$ {entradas['preco_energia']:.2f}")
+    print(f"Preço da gasolina: {formatar_moeda(entradas['preco_gasolina'])}")
+    print(f"Preço da energia: {formatar_moeda(entradas['preco_energia'])}")
     print(f"Anos simulados: {entradas['anos']}")
 
     print("\n--- Resultados ---")
-    print(f"Economia anual: R$ {economia['economia_anual']:.2f}")
-    print(f"Economia total: R$ {economia['economia_total']:.2f}")
-    print(f"Economia real: R$ {economia['economia_real']:.2f}")
+    print(f"Economia anual: {formatar_moeda(economia['economia_anual'])}")
+    print(f"Economia total: {formatar_moeda(economia['economia_total'])}")
+    print(f"Economia real: {formatar_moeda(economia['economia_real'])}")
 
     if economia["tempo_retorno"] == -1:
         print("Tempo de retorno: não se paga")
@@ -321,7 +321,7 @@ def editar_simulacao(usuario, simulacao_escolhida):
         )
 
     elif opcao == "5":
-        dados["anos"] = ler_int("Nova quantidade de anos para simulação: ")
+        dados["anos"] = ler_int("Nova quantidade de anos para simulação: ", permitir_zero=False)
 
     elif opcao == "6":
         print("\nEdição cancelada.")
