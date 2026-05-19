@@ -64,9 +64,11 @@ def mostrar_resultado_simulacao(simulacao):
     print(f"Economia real considerando investimento: {formatar_moeda(economia['economia_real'])}")
 
     if economia["tempo_retorno"] == -1:
-        print("Tempo de retorno: não se paga no período analisado")
+      print("Tempo de retorno: não se paga no período analisado")
+    elif economia["tempo_retorno"] == 0:
+     print("Tempo de retorno: imediato, pois não há investimento adicional")
     else:
-        print(f"Tempo de retorno: {economia['tempo_retorno']:.1f} anos")
+     print(f"Tempo de retorno: {economia['tempo_retorno']:.1f} anos")
 
     mostrar_subtitulo("IMPACTO AMBIENTAL")
     print(f"Redução estimada de CO₂: {formatar_numero(impacto['economia_co2'])} kg")

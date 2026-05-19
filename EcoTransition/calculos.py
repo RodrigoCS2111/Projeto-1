@@ -58,10 +58,12 @@ def calcular_economia(custo_combustivel_anual,custo_eletrico_anual,custo_total_c
 
     economia_anual = economia_total / anos
 
-    if economia_anual > 0:
-        tempo_retorno = diferenca_investimento / economia_anual
+    if diferenca_investimento <= 0:
+      tempo_retorno = 0
+    elif economia_anual > 0:
+     tempo_retorno = diferenca_investimento / economia_anual
     else:
-        tempo_retorno = -1
+      tempo_retorno = -1
 
     return {
         "economia_abastecimento_anual": economia_abastecimento_anual,
@@ -123,8 +125,10 @@ def gerar_recomendacao(score_viabilidade, quilometragem_mensal, preco_gasolina, 
     if economia_anual > 5000:
         fatores.append("Economia anual significativa")
 
-    if tempo_retorno != -1 and tempo_retorno < 5:
-        fatores.append("Retorno rápido do investimento")
+    if tempo_retorno == 0:
+      fatores.append("Não há investimento adicional em relação ao carro atual")
+    elif tempo_retorno != -1 and tempo_retorno < 5:
+      fatores.append("Retorno rápido do investimento")
 
     if score_viabilidade == 5:
         recomendacao = "Vale muito a pena realizar a troca."
