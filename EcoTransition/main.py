@@ -336,9 +336,11 @@ def editar_simulacao(usuario, simulacao_escolhida):
     )
 
     if sucesso:
-        print("\nSimulação atualizada com sucesso!")
+     print("\nSimulação atualizada com sucesso!")
+     loading("Recalculando sua análise")
+     mostrar_resultado_simulacao(nova_simulacao)
     else:
-        print("\nErro ao atualizar simulação.")
+     print("\nErro ao atualizar simulação.")
 
 if __name__ == "__main__":
     usuario = identificar_usuario()

@@ -1,5 +1,6 @@
 # Responsável por validar os dados digitados pelo usuário.
 # Também fará o tratamento de erros usando try/except.
+import re
 
 def ler_float(mensagem, permitir_zero=True):
     while True:
@@ -19,6 +20,8 @@ def ler_float(mensagem, permitir_zero=True):
             print("Entrada inválida. Digite um número válido.")
 
 
+
+
 def ler_int(mensagem, permitir_zero=True):
     while True:
         try:
@@ -36,6 +39,8 @@ def ler_int(mensagem, permitir_zero=True):
         except ValueError:
             print("Entrada inválida. Digite um número inteiro válido.")
 
+
+
 def ler_texto(mensagem):
     while True:
         texto = input(mensagem).strip()
@@ -46,6 +51,9 @@ def ler_texto(mensagem):
             print("Entrada inválida. Digite um texto válido.")
         else:
             return texto
+
+
+
 
 def ler_nome(mensagem):
     while True:
@@ -60,18 +68,25 @@ def ler_nome(mensagem):
         else:
             return texto
 
+
+
+
 def ler_email(mensagem):
     while True:
         email = input(mensagem).strip().lower()
 
+        padrao_email = r"^[\w\.-]+@[\w\.-]+\.\w+$"
+
         if email == "":
             print("Este campo não pode ficar vazio.")
 
-        elif "@" not in email or "." not in email:
+        elif not re.match(padrao_email, email):
             print("Digite um e-mail válido.")
 
         else:
             return email
+        
+        
         
 def ler_opcao(mensagem, opcoes_validas):
     while True:
