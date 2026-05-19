@@ -116,5 +116,63 @@
             }
         },
         "id": 2
+    },
+    {
+        "usuario": {
+            "nome": "Eduardo",
+            "email": "americoo@gmail.com"
+        },
+        "entradas": {
+            "preco_carro_atual": 450000.0,
+            "preco_gasolina": 3.5,
+            "preco_energia": 0.54,
+            "quilometragem_mensal": 1150.0,
+            "consumo_km_l": 15.5,
+            "categoria_veiculo": "luxo",
+            "prioridade_usuario": "economia",
+            "ipva": 8500.0,
+            "seguro": 5000.0,
+            "manutencao_anual_combustao": 3000.0,
+            "anos": 5
+        },
+        "resultados": {
+            "combustao": {
+                "litros_por_mes": 74.19354838709677,
+                "custo_combustivel_mensal": 259.67741935483866,
+                "custo_combustivel_anual": 3116.129032258064,
+                "custo_total_combustao": 98080.64516129032
+            },
+            "eletrico": {
+                "consumo_kwh_categoria": 0.25,
+                "preco_carro_eletrico": 300000.0,
+                "manutencao_anual_eletrico": 4000.0,
+                "custo_eletrico_mensal": 155.25,
+                "custo_eletrico_anual": 1863.0,
+                "custo_total_eletrico": 96815.0
+            },
+            "economia": {
+                "economia_abastecimento_anual": 1253.129032258064,
+                "economia_manutencao_anual": -1000.0,
+                "diferenca_investimento": -150000.0,
+                "economia_total": 1265.6451612903184,
+                "economia_real": 151265.6451612903,
+                "economia_anual": 253.12903225806366,
+                "tempo_retorno": -592.5831527972493
+            },
+            "impacto_ambiental": {
+                "co2_combustao_total": 10238.709677419354,
+                "co2_eletrico_total": 0,
+                "economia_co2": 10238.709677419354,
+                "equivalencia_arvores": 487.5576036866359
+            },
+            "recomendacao": {
+                "score_viabilidade": 5,
+                "recomendacao": "Vale muito a pena realizar a troca.",
+                "fatores": [
+                    "Retorno rápido do investimento"
+                ]
+            }
+        },
+        "id": 3
     }
 ]

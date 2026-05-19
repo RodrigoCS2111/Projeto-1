@@ -23,7 +23,12 @@ def salvar_simulacoes(simulacoes):
 def adicionar_simulacao(simulacao):
     simulacoes = carregar_simulacoes()
 
-    simulacao["id"] = len(simulacoes) + 1
+    if simulacoes:
+        novo_id = max(simulacao["id"] for simulacao in simulacoes) + 1
+    else:
+        novo_id = 1
+
+    simulacao["id"] = novo_id
 
     simulacoes.append(simulacao)
 

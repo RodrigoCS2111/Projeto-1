@@ -1,13 +1,17 @@
 # Responsável por validar os dados digitados pelo usuário.
 # Também fará o tratamento de erros usando try/except.
 
-def ler_float(mensagem):
+def ler_float(mensagem, permitir_zero=True):
     while True:
         try:
             valor = float(input(mensagem))
 
             if valor < 0:
                 print("Digite um valor positivo.")
+
+            elif valor == 0 and not permitir_zero:
+                print("Digite um valor maior que zero.")
+
             else:
                 return valor
 
@@ -15,13 +19,17 @@ def ler_float(mensagem):
             print("Entrada inválida. Digite um número válido.")
 
 
-def ler_int(mensagem):
+def ler_int(mensagem, permitir_zero=True):
     while True:
         try:
             valor = int(input(mensagem))
 
             if valor < 0:
                 print("Digite um valor positivo.")
+
+            elif valor == 0 and not permitir_zero:
+                print("Digite um valor maior que zero.")
+
             else:
                 return valor
 
