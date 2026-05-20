@@ -49,6 +49,7 @@ def coletar_dados_simulacao():
 
 
 def identificar_usuario():
+    limpar_tela()
     mostrar_titulo("IDENTIFICAÇÃO DO USUÁRIO")
 
     nome = ler_nome("Digite seu nome: ")
