@@ -52,14 +52,20 @@ def identificar_usuario():
     limpar_tela()
     mostrar_titulo("IDENTIFICAÇÃO DO USUÁRIO")
 
-    nome = ler_nome("Digite seu nome: ")
-    email = ler_email("Digite seu e-mail: ")
+    print("Precisamos de algumas informações para personalizar sua experiência")
+    print("e permitir que seu histórico de simulações fique salvo para consultas futuras.\n")
+
+    print("🔒 Seus dados serão utilizados apenas para identificação dentro do sistema.\n")
+
+    nome = ler_nome("👤 Como podemos te chamar? ")
+    email = ler_email("📧 Informe seu melhor e-mail: ")
+
+    loading("Preparando seu ambiente")
 
     return {
         "nome": nome,
         "email": email
     }
-
 
  
     
