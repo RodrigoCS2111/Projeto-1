@@ -4,7 +4,7 @@ from calculos import calcular_combustao, calcular_eletrico, calcular_economia, c
 from dados import CARROS_ELETRICOS, FATOR_CO2_GASOLINA, FATOR_ARVORE
 from validacoes import ler_float, ler_int, ler_nome, ler_opcao, ler_email
 from crud import adicionar_simulacao, listar_simulacoes_usuario, atualizar_simulacao, excluir_simulacao
-from interface import mostrar_titulo, pausar, loading, mostrar_resultado_simulacao, limpar_tela, formatar_moeda
+from interface import mostrar_titulo, pausar, loading, mostrar_resultado_simulacao, limpar_tela, formatar_moeda, mostrar_boas_vindas
 
 
 def coletar_dados_simulacao():
@@ -349,5 +349,6 @@ def editar_simulacao(usuario, simulacao_escolhida):
      print("\nErro ao atualizar simulação.")
 
 if __name__ == "__main__":
+    mostrar_boas_vindas()
     usuario = identificar_usuario()
     menu_principal(usuario)

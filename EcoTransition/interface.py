@@ -9,8 +9,12 @@ def limpar_tela():
     else:
         subprocess.run("clear", shell=True)
 
+
+
 def mostrar_linha():
     print("=" * 50)
+
+
 
 
 def mostrar_titulo(titulo):
@@ -19,14 +23,20 @@ def mostrar_titulo(titulo):
     print("=" * 50)
 
 
+
+
 def mostrar_subtitulo(subtitulo):
     print("\n" + "-" * 50)
     print(subtitulo)
     print("-" * 50)
 
 
+
+
 def pausar():
     input("\nPressione ENTER para continuar...")
+
+
 
 
 def loading(mensagem="Processando dados"):
@@ -39,12 +49,52 @@ def loading(mensagem="Processando dados"):
     print("\n")
 
 
+
+
 def formatar_moeda(valor):
     return f"R$ {valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
 
+
+
 def formatar_numero(valor):
     return f"{valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
+
+
+
+def mostrar_boas_vindas():
+    limpar_tela()
+
+    logo = r"""
+  ______          _______                    __   _             
+ |  ____|        |__   __|                 (_) | (_)            
+ | |__   ___ ___    | |_ __ __ _ _ __  ___  _| |_ _  ___  _ __  
+ |  __| / __/ _ \   | | '__/ _` | '_ \/ __|| | __| |/ _ \| '_ \ 
+ | |___| (_| (_) |  | | | | (_| | | | \__ \| | |_| | (_) | | | |
+ |______\___\___/   |_|_|  \__,_|_| |_|___/|_|\__|_|\___/|_| |_|
+    """
+
+    print(logo)
+    print("🌱 Mobilidade inteligente começa com boas decisões. ⚡".center(65))
+
+    print("\nBem-vindo ao EcoTransition!\n")
+
+    print("Descubra se migrar de um veículo a combustão para um elétrico")
+    print("realmente vale a pena para o seu perfil de uso.\n")
+
+    print("Aqui você poderá:")
+    print("💰 Comparar custos entre combustão e elétrico")
+    print("🌱 Visualizar o impacto ambiental da troca")
+    print("📊 Receber uma análise personalizada")
+    print("⭐ Obter uma recomendação final de viabilidade\n")
+
+
+    input("Pressione ENTER para começar...")
+
+    loading("Inicializando EcoTransition")
+
+
 
 
 def mostrar_resultado_simulacao(simulacao):
