@@ -75,8 +75,11 @@ def mostrar_resultado_simulacao(simulacao):
     print(f"Equivalente a aproximadamente {impacto['equivalencia_arvores']:.0f} árvores")
 
     mostrar_subtitulo("RECOMENDAÇÃO")
+    
     print(f"Score de viabilidade: {recomendacao['score_viabilidade']}/5")
+    print(f"Perfil da simulação: {recomendacao['perfil_usuario']}")
     print(f"Recomendação: {recomendacao['recomendacao']}")
+    print(f"Mensagem: {recomendacao['mensagem_prioridade']}")
 
     print("\nPrincipais fatores:")
     if recomendacao["fatores"]:

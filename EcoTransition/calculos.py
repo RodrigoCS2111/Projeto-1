@@ -111,7 +111,7 @@ def calcular_score(tempo_retorno):
 
 
 
-def gerar_recomendacao(score_viabilidade, quilometragem_mensal, preco_gasolina, economia_anual, tempo_retorno):
+def gerar_recomendacao(score_viabilidade, quilometragem_mensal, preco_gasolina, economia_anual, tempo_retorno, prioridade_usuario):
    
 
     fatores = []
@@ -141,8 +141,20 @@ def gerar_recomendacao(score_viabilidade, quilometragem_mensal, preco_gasolina, 
     else:
         recomendacao = "Não vale a pena realizar a troca, pois o investimento não se paga."
 
+    if prioridade_usuario == "economia":
+     perfil_usuario = "Econômico"
+     mensagem_prioridade = "Como sua prioridade é economia, o destaque da análise está na economia anual, no tempo de retorno e na redução de custos operacionais."
+    elif prioridade_usuario == "sustentabilidade":
+     perfil_usuario = "Sustentável"
+     mensagem_prioridade = "Como sua prioridade é sustentabilidade, o principal destaque está na redução de CO₂ e na equivalência ambiental em árvores."
+    else:
+     perfil_usuario = "Equilibrado"
+     mensagem_prioridade = "Como sua prioridade é equilíbrio, a análise considera tanto os ganhos financeiros quanto os impactos ambientais positivos."
+
     return {
         "score_viabilidade": score_viabilidade,
+        "perfil_usuario": perfil_usuario,
         "recomendacao": recomendacao,
+        "mensagem_prioridade": mensagem_prioridade,
         "fatores": fatores
     }

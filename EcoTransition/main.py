@@ -141,11 +141,12 @@ def processar_simulacao(usuario, dados):
     score = calcular_score(economia["tempo_retorno"])
 
     recomendacao = gerar_recomendacao(
-        score_viabilidade=score,
-        quilometragem_mensal=dados["quilometragem_mensal"],
-        preco_gasolina=dados["preco_gasolina"],
-        economia_anual=economia["economia_anual"],
-        tempo_retorno=economia["tempo_retorno"]
+     score_viabilidade=score,
+     quilometragem_mensal=dados["quilometragem_mensal"],
+     preco_gasolina=dados["preco_gasolina"],
+     economia_anual=economia["economia_anual"],
+     tempo_retorno=economia["tempo_retorno"],
+     prioridade_usuario=dados["prioridade_usuario"]
     )
 
     simulacao = {
@@ -196,7 +197,8 @@ def menu_historico(usuario):
             print(f"Categoria: {simulacao['entradas']['categoria_veiculo']}")
             print(f"Economia total: {formatar_moeda(simulacao['resultados']['economia']['economia_total'])}")
             print(f"Score: {simulacao['resultados']['recomendacao']['score_viabilidade']}/5")
-
+            print(f"Perfil: {simulacao['resultados']['recomendacao']['perfil_usuario']}")
+            
         print("\n1 - Gerenciar simulação")
         print("2 - Voltar ao menu principal")
 
@@ -283,7 +285,10 @@ def ver_detalhes_simulacao(simulacao):
     print(f"CO₂ evitado: {impacto['economia_co2']:.2f} kg")
     print(f"Equivalência em árvores: {impacto['equivalencia_arvores']:.0f}")
     print(f"Score: {recomendacao['score_viabilidade']}/5")
+    print(f"Perfil da simulação: {recomendacao['perfil_usuario']}")
+    print(f"Prioridade informada: {entradas['prioridade_usuario']}")
     print(f"Recomendação: {recomendacao['recomendacao']}")
+    print(f"Mensagem personalizada: {recomendacao['mensagem_prioridade']}")
 
 
 
