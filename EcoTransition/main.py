@@ -70,35 +70,47 @@ def identificar_usuario():
  
     
 def menu_principal(usuario):
-    
     while True:
         limpar_tela()
         mostrar_titulo("MENU PRINCIPAL")
-        print(f"Usuário: {usuario['nome']} | {usuario['email']}")
-        print("1 - Nova simulação")
-        print("2 - Ver histórico")
-        print("3 - Sair")
+
+        print(f"Seja bem-vindo, {usuario['nome']}!👋\n")
+        print("O que você deseja fazer agora?\n")
+
+        print("1 - 🚗 Nova simulação")
+        print("   Compare seu veículo atual com um modelo elétrico.\n")
+
+        print("2 - 📂 Ver histórico")
+        print("   Consulte, edite ou exclua simulações salvas.\n")
+
+        print("3 - 🚪 Sair")
+        print("   Encerrar o sistema.\n")
 
         opcao = ler_opcao("Escolha uma opção: ", ["1", "2", "3"])
 
         if opcao == "1":
-         simulacao = executar_simulacao(usuario)
+            simulacao = executar_simulacao(usuario)
 
-         salvar = ler_opcao("\nDeseja salvar esta simulação? (s/n): ",["s", "n"])
+            salvar = ler_opcao(
+                "\nDeseja salvar esta simulação? (s/n): ",
+                ["s", "n"]
+            )
 
-         if salvar == "s":
-          adicionar_simulacao(simulacao)
-          print("\nSimulação salva com sucesso!")
-         else:
-          print("\nSimulação não foi salva.")
+            if salvar == "s":
+                adicionar_simulacao(simulacao)
+                print("\n✅ Simulação salva com sucesso!")
+            else:
+                print("\nSimulação não foi salva.")
 
-         print("\nSimulação finalizada com sucesso!")
+            print("\n✅ Simulação finalizada com sucesso!")
+            pausar()
 
         elif opcao == "2":
-         menu_historico(usuario)
-         
+            menu_historico(usuario)
+
         elif opcao == "3":
-            print("\nEncerrando o EcoTransition. Até logo!")
+            print("\nObrigado por usar o EcoTransition 🌱")
+            print("Até logo!")
             break
 
 

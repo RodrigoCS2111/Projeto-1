@@ -76,7 +76,7 @@ def mostrar_boas_vindas():
     """
 
     print(logo)
-    print("🌱 Mobilidade inteligente começa com boas decisões. ⚡".center(65))
+    print("🌱 Mobilidade inteligente começa com boas decisões.⚡".center(62))
 
     print("\nBem-vindo ao EcoTransition!\n")
 
