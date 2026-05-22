@@ -109,44 +109,85 @@ def mostrar_progresso(etapa_atual, total_etapas, titulo_etapa):
 
 
 
+def formatar_score(score):
+    estrelas_preenchidas = "⭐" * score
+    estrelas_vazias = "☆" * (5 - score)
+
+    return f"{estrelas_preenchidas}{estrelas_vazias} {score}/5"
+
+
+def gerar_headline(score):
+    if score == 5:
+        return "Excelente cenário para migração elétrica"
+    elif score == 4:
+        return "Bom cenário para considerar a troca"
+    elif score == 3:
+        return "Cenário moderado, exige análise cuidadosa"
+    elif score == 2:
+        return "Migração pouco vantajosa neste cenário"
+    else:
+        return "Troca não recomendada financeiramente"
+
+
+
 
 def mostrar_resultado_simulacao(simulacao):
+    limpar_tela()
     combustao = simulacao["resultados"]["combustao"]
     eletrico = simulacao["resultados"]["eletrico"]
     economia = simulacao["resultados"]["economia"]
     impacto = simulacao["resultados"]["impacto_ambiental"]
     recomendacao = simulacao["resultados"]["recomendacao"]
 
-    mostrar_titulo("RESULTADO DA SIMULAÇÃO")
+    score = recomendacao["score_viabilidade"]
 
-    mostrar_subtitulo("RESULTADOS FINANCEIROS")
-    print(f"Custo anual com combustível: {formatar_moeda(combustao['custo_combustivel_anual'])}")
-    print(f"Custo anual com energia: {formatar_moeda(eletrico['custo_eletrico_anual'])}")
-    print(f"Economia anual estimada: {formatar_moeda(economia['economia_anual'])}")
-    print(f"Economia total no período: {formatar_moeda(economia['economia_total'])}")
-    print(f"Economia real considerando investimento: {formatar_moeda(economia['economia_real'])}")
+    mostrar_titulo("RESULTADO DA ANÁLISE")
+
+    print(formatar_score(score).center(50))
+    print(recomendacao["recomendacao"].upper().center(50))
+    print(gerar_headline(score).center(50))
+
+    mostrar_subtitulo("💰 IMPACTO FINANCEIRO")
+
+    print(f"Hoje com seu veículo atual:")
+    print(f"{formatar_moeda(combustao['custo_combustivel_anual'])} por ano\n")
+
+    print(f"Com veículo elétrico:")
+    print(f"{formatar_moeda(eletrico['custo_eletrico_anual'])} por ano\n")
+
+    print(f"Economia estimada:")
+    print(f"💰 {formatar_moeda(economia['economia_anual'])} por ano\n")
+
+    print(f"Economia acumulada no período:")
+    print(f"{formatar_moeda(economia['economia_total'])}\n")
+
+    print(f"Saldo final após considerar a diferença de preço dos veículos:")
+    print(f"{formatar_moeda(economia['economia_real'])}\n")
 
     if economia["tempo_retorno"] == -1:
-      print("Tempo de retorno: não se paga no período analisado")
+        print("⚠️ Dentro do período analisado, o investimento não se paga financeiramente.")
     elif economia["tempo_retorno"] == 0:
-     print("Tempo de retorno: imediato, pois não há investimento adicional")
+        print("⏳ Retorno imediato, pois não há investimento adicional em relação ao carro atual.")
     else:
-     print(f"Tempo de retorno: {economia['tempo_retorno']:.1f} anos")
+        print(f"⏳ O investimento pode se pagar em aproximadamente {economia['tempo_retorno']:.1f} anos.")
 
-    mostrar_subtitulo("IMPACTO AMBIENTAL")
-    print(f"Redução estimada de CO₂: {formatar_numero(impacto['economia_co2'])} kg")
-    print(f"Equivalente a aproximadamente {impacto['equivalencia_arvores']:.0f} árvores")
+    mostrar_subtitulo("🌱 IMPACTO AMBIENTAL")
 
-    mostrar_subtitulo("RECOMENDAÇÃO")
-    
-    print(f"Score de viabilidade: {recomendacao['score_viabilidade']}/5")
-    print(f"Perfil da simulação: {recomendacao['perfil_usuario']}")
-    print(f"Recomendação: {recomendacao['recomendacao']}")
-    print(f"Mensagem: {recomendacao['mensagem_prioridade']}")
+    print(f"CO₂ evitado:")
+    print(f"{formatar_numero(impacto['economia_co2'])} kg\n")
 
-    print("\nPrincipais fatores:")
+    print(f"Equivalente ambiental:")
+    print(f"🌳 Aproximadamente {impacto['equivalencia_arvores']:.0f} árvores\n")
+
+    mostrar_subtitulo("🎯 PERFIL DA SIMULAÇÃO")
+
+    print(f"Perfil identificado: {recomendacao['perfil_usuario']}")
+    print(f"{recomendacao['mensagem_prioridade']}")
+
+    mostrar_subtitulo("📌 POR QUE CHEGAMOS NESSA CONCLUSÃO")
+
     if recomendacao["fatores"]:
         for fator in recomendacao["fatores"]:
-            print(f"- {fator}")
+            print(f"• {fator}")
     else:
-        print("- Nenhum fator de destaque identificado.")
+        print("• Nenhum fator de destaque identificado.")
