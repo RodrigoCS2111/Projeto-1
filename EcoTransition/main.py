@@ -4,17 +4,76 @@ from calculos import calcular_combustao, calcular_eletrico, calcular_economia, c
 from dados import CARROS_ELETRICOS, FATOR_CO2_GASOLINA, FATOR_ARVORE
 from validacoes import ler_float, ler_int, ler_nome, ler_opcao, ler_email
 from crud import adicionar_simulacao, listar_simulacoes_usuario, atualizar_simulacao, excluir_simulacao
-from interface import mostrar_titulo, pausar, loading, mostrar_resultado_simulacao, limpar_tela, formatar_moeda, mostrar_boas_vindas
+from interface import mostrar_titulo, pausar, loading, mostrar_resultado_simulacao, limpar_tela, formatar_moeda, mostrar_boas_vindas, mostrar_progresso
 
-
-def coletar_dados_simulacao():
-    mostrar_titulo("DADOS DA SIMULAÇÃO")
+def coletar_dados_veiculo():
+    limpar_tela()
+    mostrar_titulo("NOVA SIMULAÇÃO")
+    mostrar_progresso(1, 4, "🚗 Dados do veículo atual")
 
     preco_carro_atual = ler_float("Preço do carro atual (R$): ")
-    preco_gasolina = ler_float("Preço da gasolina (R$/L): ")
-    preco_energia = ler_float("Preço da energia (R$/kWh): ")
-    quilometragem_mensal = ler_float("Quilometragem mensal (km): ")
     consumo_km_l = ler_float("Consumo do veículo a combustão (km/L): ", permitir_zero=False)
+    manutencao_anual_combustao = ler_float("Manutenção anual do carro atual (R$): ")
+
+    return {
+        "preco_carro_atual": preco_carro_atual,
+        "consumo_km_l": consumo_km_l,
+        "manutencao_anual_combustao": manutencao_anual_combustao
+    }
+
+
+
+def coletar_custos_fixos():
+    limpar_tela()
+    mostrar_titulo("NOVA SIMULAÇÃO")
+    mostrar_progresso(2, 4, "💰 Custos fixos")
+
+    preco_gasolina = ler_float("Preço da gasolina (R$/L): ")
+    ipva = ler_float("IPVA anual (R$): ")
+    seguro = ler_float("Seguro anual (R$): ")
+
+    return {
+        "preco_gasolina": preco_gasolina,
+        "ipva": ipva,
+        "seguro": seguro
+    }
+
+
+
+def coletar_uso_energia():
+    limpar_tela()
+    mostrar_titulo("NOVA SIMULAÇÃO")
+    mostrar_progresso(3, 4, "⚡ Uso e energia")
+
+    quilometragem_mensal = ler_float("Quilometragem mensal (km): ")
+    anos = ler_int("Quantidade de anos para simulação: ", permitir_zero=False)
+
+    print("\nComo deseja informar o custo da energia?\n")
+    print("1 - Usar média nacional (R$ 0,85/kWh)")
+    print("2 - Informar manualmente\n")
+
+    opcao_energia = ler_opcao("Escolha uma opção: ", ["1", "2"])
+
+    if opcao_energia == "1":
+        preco_energia = 0.85
+        print("\n✅ Média nacional aplicada: R$ 0,85/kWh")
+        pausar()
+
+    else:
+        preco_energia = ler_float("Informe o preço da energia (R$/kWh): ")
+
+    return {
+        "quilometragem_mensal": quilometragem_mensal,
+        "anos": anos,
+        "preco_energia": preco_energia
+    }
+
+
+
+def coletar_preferencias():
+    limpar_tela()
+    mostrar_titulo("NOVA SIMULAÇÃO")
+    mostrar_progresso(4, 4, "🎯 Preferências da simulação")
 
     categoria_veiculo = ler_opcao(
         "Categoria do veículo elétrico desejado (popular/suv/luxo): ",
@@ -26,24 +85,64 @@ def coletar_dados_simulacao():
         ["economia", "sustentabilidade", "equilibrio"]
     )
 
-    ipva = ler_float("IPVA anual (R$): ")
-    seguro = ler_float("Seguro anual (R$): ")
-    manutencao_anual_combustao = ler_float("Manutenção anual do carro atual (R$): ")
-    anos = ler_int("Quantidade de anos para simulação: ", permitir_zero=False)
-
     return {
-        "preco_carro_atual": preco_carro_atual,
-        "preco_gasolina": preco_gasolina,
-        "preco_energia": preco_energia,
-        "quilometragem_mensal": quilometragem_mensal,
-        "consumo_km_l": consumo_km_l,
         "categoria_veiculo": categoria_veiculo,
-        "prioridade_usuario": prioridade_usuario,
-        "ipva": ipva,
-        "seguro": seguro,
-        "manutencao_anual_combustao": manutencao_anual_combustao,
-        "anos": anos
+        "prioridade_usuario": prioridade_usuario
     }
+
+
+
+def mostrar_resumo_dados(dados):
+    limpar_tela()
+    mostrar_titulo("RESUMO DA SIMULAÇÃO")
+
+    print("Confira os dados informados antes de gerar a análise:\n")
+
+    print("🚗 Veículo atual")
+    print(f"Preço do carro atual: {formatar_moeda(dados['preco_carro_atual'])}")
+    print(f"Consumo: {dados['consumo_km_l']} km/L")
+    print(f"Manutenção anual: {formatar_moeda(dados['manutencao_anual_combustao'])}")
+
+    print("\n💰 Custos fixos")
+    print(f"Preço da gasolina: {formatar_moeda(dados['preco_gasolina'])}")
+    print(f"IPVA anual: {formatar_moeda(dados['ipva'])}")
+    print(f"Seguro anual: {formatar_moeda(dados['seguro'])}")
+
+    print("\n⚡ Uso e energia")
+    print(f"Quilometragem mensal: {dados['quilometragem_mensal']} km")
+    print(f"Anos simulados: {dados['anos']}")
+    print(f"Preço da energia: {formatar_moeda(dados['preco_energia'])}/kWh")
+
+    print("\n🎯 Preferências")
+    print(f"Categoria desejada: {dados['categoria_veiculo']}")
+    print(f"Prioridade: {dados['prioridade_usuario']}")
+
+    print("\n1 - Confirmar e calcular")
+    print("2 - Refazer preenchimento")
+
+    opcao = ler_opcao("Escolha uma opção: ", ["1", "2"])
+
+    return opcao == "1"
+
+
+
+ 
+def coletar_dados_simulacao():
+    while True:
+        dados = {}
+
+        dados.update(coletar_dados_veiculo())
+        dados.update(coletar_custos_fixos())
+        dados.update(coletar_uso_energia())
+        dados.update(coletar_preferencias())
+
+        confirmado = mostrar_resumo_dados(dados)
+
+        if confirmado:
+            return dados
+        else:
+            print("\nVamos refazer o preenchimento.")
+            pausar()
 
 
 

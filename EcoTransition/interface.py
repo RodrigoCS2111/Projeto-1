@@ -97,6 +97,19 @@ def mostrar_boas_vindas():
 
 
 
+def mostrar_progresso(etapa_atual, total_etapas, titulo_etapa):
+    tamanho_barra = 20
+    progresso = int((etapa_atual / total_etapas) * tamanho_barra)
+
+    barra_preenchida = "█" * progresso
+    barra_vazia = "░" * (tamanho_barra - progresso)
+
+    print(f"[{barra_preenchida}{barra_vazia}] Etapa {etapa_atual}/{total_etapas}")
+    print(f"{titulo_etapa}\n")
+
+
+
+
 def mostrar_resultado_simulacao(simulacao):
     combustao = simulacao["resultados"]["combustao"]
     eletrico = simulacao["resultados"]["eletrico"]
