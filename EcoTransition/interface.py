@@ -3,6 +3,7 @@ import subprocess
 import platform
 import time
 
+
 def limpar_tela():
     if platform.system() == "Windows":
         subprocess.run("cls", shell=True)
@@ -10,11 +11,8 @@ def limpar_tela():
         subprocess.run("clear", shell=True)
 
 
-
 def mostrar_linha():
     print("=" * 50)
-
-
 
 
 def mostrar_titulo(titulo):
@@ -23,20 +21,14 @@ def mostrar_titulo(titulo):
     print("=" * 50)
 
 
-
-
 def mostrar_subtitulo(subtitulo):
     print("\n" + "-" * 50)
     print(subtitulo)
     print("-" * 50)
 
 
-
-
 def pausar():
     input("\nPressione ENTER para continuar...")
-
-
 
 
 def loading(mensagem="Processando dados"):
@@ -49,18 +41,12 @@ def loading(mensagem="Processando dados"):
     print("\n")
 
 
-
-
 def formatar_moeda(valor):
     return f"R$ {valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
 
-
-
 def formatar_numero(valor):
     return f"{valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-
-
 
 
 def mostrar_boas_vindas():
@@ -89,12 +75,9 @@ def mostrar_boas_vindas():
     print("📊 Receber uma análise personalizada")
     print("⭐ Obter uma recomendação final de viabilidade\n")
 
-
     input("Pressione ENTER para começar...")
 
     loading("Inicializando EcoTransition")
-
-
 
 
 def mostrar_progresso(etapa_atual, total_etapas, titulo_etapa):
@@ -106,7 +89,6 @@ def mostrar_progresso(etapa_atual, total_etapas, titulo_etapa):
 
     print(f"[{barra_preenchida}{barra_vazia}] Etapa {etapa_atual}/{total_etapas}")
     print(f"{titulo_etapa}\n")
-
 
 
 def formatar_score(score):
@@ -127,8 +109,6 @@ def gerar_headline(score):
         return "Migração pouco vantajosa neste cenário"
     else:
         return "Troca não recomendada financeiramente"
-
-
 
 
 def mostrar_resultado_simulacao(simulacao):
@@ -165,11 +145,17 @@ def mostrar_resultado_simulacao(simulacao):
     print(f"{formatar_moeda(economia['economia_real'])}\n")
 
     if economia["tempo_retorno"] == -1:
-        print("⚠️ Dentro do período analisado, o investimento não se paga financeiramente.")
+        print(
+            "⚠️ Dentro do período analisado, o investimento não se paga financeiramente."
+        )
     elif economia["tempo_retorno"] == 0:
-        print("⏳ Retorno imediato, pois não há investimento adicional em relação ao carro atual.")
+        print(
+            "⏳ Retorno imediato, pois não há investimento adicional em relação ao carro atual."
+        )
     else:
-        print(f"⏳ O investimento pode se pagar em aproximadamente {economia['tempo_retorno']:.1f} anos.")
+        print(
+            f"⏳ O investimento pode se pagar em aproximadamente {economia['tempo_retorno']:.1f} anos."
+        )
 
     mostrar_subtitulo("🌱 IMPACTO AMBIENTAL")
 
@@ -191,3 +177,72 @@ def mostrar_resultado_simulacao(simulacao):
             print(f"• {fator}")
     else:
         print("• Nenhum fator de destaque identificado.")
+
+
+def calcular_diferenca(valor_antigo, valor_novo):
+    return valor_novo - valor_antigo
+
+
+def mostrar_variacao_moeda(label, valor_antigo, valor_novo):
+    diferenca = calcular_diferenca(valor_antigo, valor_novo)
+
+    print(f"{label}:")
+    print(f"Antes: {formatar_moeda(valor_antigo)}")
+    print(f"Depois: {formatar_moeda(valor_novo)}")
+
+    if diferenca > 0:
+        print(f"Diferença: +{formatar_moeda(diferenca)}\n")
+    elif diferenca < 0:
+        print(f"Diferença: -{formatar_moeda(abs(diferenca))}\n")
+    else:
+        print("Diferença: sem alteração\n")
+
+
+def mostrar_impacto_edicao(
+    simulacao_antiga, nova_simulacao, campo_alterado, valor_antigo, valor_novo
+):
+    economia_antiga = simulacao_antiga["resultados"]["economia"]
+    economia_nova = nova_simulacao["resultados"]["economia"]
+
+    recomendacao_antiga = simulacao_antiga["resultados"]["recomendacao"]
+    recomendacao_nova = nova_simulacao["resultados"]["recomendacao"]
+
+    mostrar_titulo("IMPACTO DA ALTERAÇÃO")
+
+    print(f"Campo alterado: {campo_alterado}")
+    print(f"Valor anterior: {valor_antigo}")
+    print(f"Novo valor: {valor_novo}\n")
+
+    mostrar_subtitulo("COMPARAÇÃO DOS RESULTADOS")
+
+    mostrar_variacao_moeda(
+        "Economia anual",
+        economia_antiga["economia_anual"],
+        economia_nova["economia_anual"],
+    )
+
+    mostrar_variacao_moeda(
+        "Economia total",
+        economia_antiga["economia_total"],
+        economia_nova["economia_total"],
+    )
+
+    mostrar_variacao_moeda(
+        "Saldo final", economia_antiga["economia_real"], economia_nova["economia_real"]
+    )
+
+    print("Tempo de retorno:")
+    print(
+        f"Antes: {economia_antiga['tempo_retorno']:.1f} anos"
+        if economia_antiga["tempo_retorno"] != -1
+        else "Antes: não se paga"
+    )
+    print(
+        f"Depois: {economia_nova['tempo_retorno']:.1f} anos"
+        if economia_nova["tempo_retorno"] != -1
+        else "Depois: não se paga"
+    )
+
+    print("\nScore:")
+    print(f"Antes: {formatar_score(recomendacao_antiga['score_viabilidade'])}")
+    print(f"Depois: {formatar_score(recomendacao_nova['score_viabilidade'])}")

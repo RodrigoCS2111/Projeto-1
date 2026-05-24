@@ -2,6 +2,7 @@
 # Também fará o tratamento de erros usando try/except.
 import re
 
+
 def ler_float(mensagem, permitir_zero=True):
     while True:
         try:
@@ -18,8 +19,6 @@ def ler_float(mensagem, permitir_zero=True):
 
         except ValueError:
             print("Entrada inválida. Digite um número válido.")
-
-
 
 
 def ler_int(mensagem, permitir_zero=True):
@@ -40,7 +39,6 @@ def ler_int(mensagem, permitir_zero=True):
             print("Entrada inválida. Digite um número inteiro válido.")
 
 
-
 def ler_texto(mensagem):
     while True:
         texto = input(mensagem).strip()
@@ -51,8 +49,6 @@ def ler_texto(mensagem):
             print("Entrada inválida. Digite um texto válido.")
         else:
             return texto
-
-
 
 
 def ler_nome(mensagem):
@@ -69,8 +65,6 @@ def ler_nome(mensagem):
             return texto
 
 
-
-
 def ler_email(mensagem):
     while True:
         email = input(mensagem).strip().lower()
@@ -85,9 +79,8 @@ def ler_email(mensagem):
 
         else:
             return email
-        
-        
-        
+
+
 def ler_opcao(mensagem, opcoes_validas):
     while True:
         opcao = input(mensagem).strip().lower()
@@ -95,9 +88,9 @@ def ler_opcao(mensagem, opcoes_validas):
         if opcao in opcoes_validas:
             return opcao
         else:
-            print(f"Opção inválida. Escolha uma das opções: {', '.join(opcoes_validas)}")
-            
-
+            print(
+                f"Opção inválida. Escolha uma das opções: {', '.join(opcoes_validas)}"
+            )
 
 
 def ler_menu_opcoes(titulo, opcoes):

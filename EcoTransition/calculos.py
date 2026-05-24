@@ -1,7 +1,16 @@
 # Responsável pelos cálculos do sistema.
 # Aqui ficarão as fórmulas de economia, custo, CO₂, payback, score e recomendação.
 
-def calcular_combustao(quilometragem_mensal, consumo_km_l, preco_gasolina, ipva, seguro, manutencao_anual_combustao, anos):
+
+def calcular_combustao(
+    quilometragem_mensal,
+    consumo_km_l,
+    preco_gasolina,
+    ipva,
+    seguro,
+    manutencao_anual_combustao,
+    anos,
+):
 
     litros_por_mes = quilometragem_mensal / consumo_km_l
 
@@ -9,18 +18,28 @@ def calcular_combustao(quilometragem_mensal, consumo_km_l, preco_gasolina, ipva,
 
     custo_combustivel_anual = custo_combustivel_mensal * 12
 
-    custo_total_combustao = (custo_combustivel_anual + ipva + seguro + manutencao_anual_combustao) * anos
+    custo_total_combustao = (
+        custo_combustivel_anual + ipva + seguro + manutencao_anual_combustao
+    ) * anos
 
     return {
         "litros_por_mes": litros_por_mes,
         "custo_combustivel_mensal": custo_combustivel_mensal,
         "custo_combustivel_anual": custo_combustivel_anual,
-        "custo_total_combustao": custo_total_combustao
+        "custo_total_combustao": custo_total_combustao,
     }
-    
 
-def calcular_eletrico(quilometragem_mensal, preco_energia, categoria_veiculo, ipva, seguro, anos, carros_eletricos):
-   
+
+def calcular_eletrico(
+    quilometragem_mensal,
+    preco_energia,
+    categoria_veiculo,
+    ipva,
+    seguro,
+    anos,
+    carros_eletricos,
+):
+
     dados_categoria = carros_eletricos[categoria_veiculo]
 
     consumo_kwh_categoria = dados_categoria["consumo_kwh_km"]
@@ -31,7 +50,9 @@ def calcular_eletrico(quilometragem_mensal, preco_energia, categoria_veiculo, ip
 
     custo_eletrico_anual = custo_eletrico_mensal * 12
 
-    custo_total_eletrico = ( custo_eletrico_anual + ipva + seguro + manutencao_anual_eletrico) * anos
+    custo_total_eletrico = (
+        custo_eletrico_anual + ipva + seguro + manutencao_anual_eletrico
+    ) * anos
 
     return {
         "consumo_kwh_categoria": consumo_kwh_categoria,
@@ -39,12 +60,21 @@ def calcular_eletrico(quilometragem_mensal, preco_energia, categoria_veiculo, ip
         "manutencao_anual_eletrico": manutencao_anual_eletrico,
         "custo_eletrico_mensal": custo_eletrico_mensal,
         "custo_eletrico_anual": custo_eletrico_anual,
-        "custo_total_eletrico": custo_total_eletrico
+        "custo_total_eletrico": custo_total_eletrico,
     }
-    
 
-def calcular_economia(custo_combustivel_anual,custo_eletrico_anual,custo_total_combustao, custo_total_eletrico, manutencao_anual_combustao, manutencao_anual_eletrico, preco_carro_atual, preco_carro_eletrico, anos):
-   
+
+def calcular_economia(
+    custo_combustivel_anual,
+    custo_eletrico_anual,
+    custo_total_combustao,
+    custo_total_eletrico,
+    manutencao_anual_combustao,
+    manutencao_anual_eletrico,
+    preco_carro_atual,
+    preco_carro_eletrico,
+    anos,
+):
 
     economia_abastecimento_anual = custo_combustivel_anual - custo_eletrico_anual
 
@@ -52,18 +82,20 @@ def calcular_economia(custo_combustivel_anual,custo_eletrico_anual,custo_total_c
 
     diferenca_investimento = preco_carro_eletrico - preco_carro_atual
 
-    economia_total = custo_total_combustao - custo_total_eletrico 
+    economia_total = custo_total_combustao - custo_total_eletrico
 
-    economia_real = economia_total - diferenca_investimento ## Analisar se vai manter esse cálculo
+    economia_real = (
+        economia_total - diferenca_investimento
+    )  ## Analisar se vai manter esse cálculo
 
     economia_anual = economia_total / anos
 
     if diferenca_investimento <= 0:
-      tempo_retorno = 0
+        tempo_retorno = 0
     elif economia_anual > 0:
-     tempo_retorno = diferenca_investimento / economia_anual
+        tempo_retorno = diferenca_investimento / economia_anual
     else:
-      tempo_retorno = -1
+        tempo_retorno = -1
 
     return {
         "economia_abastecimento_anual": economia_abastecimento_anual,
@@ -72,9 +104,10 @@ def calcular_economia(custo_combustivel_anual,custo_eletrico_anual,custo_total_c
         "economia_total": economia_total,
         "economia_real": economia_real,
         "economia_anual": economia_anual,
-        "tempo_retorno": tempo_retorno
+        "tempo_retorno": tempo_retorno,
     }
-    
+
+
 def calcular_impacto_ambiental(litros_por_mes, anos, fator_co2_gasolina, fator_arvore):
 
     co2_combustao_total = litros_por_mes * fator_co2_gasolina * 12 * anos
@@ -89,12 +122,11 @@ def calcular_impacto_ambiental(litros_por_mes, anos, fator_co2_gasolina, fator_a
         "co2_combustao_total": co2_combustao_total,
         "co2_eletrico_total": co2_eletrico_total,
         "economia_co2": economia_co2,
-        "equivalencia_arvores": equivalencia_arvores
+        "equivalencia_arvores": equivalencia_arvores,
     }
-    
+
 
 def calcular_score(tempo_retorno):
-  
 
     if tempo_retorno == -1:
         score_viabilidade = 1
@@ -110,9 +142,14 @@ def calcular_score(tempo_retorno):
     return score_viabilidade
 
 
-
-def gerar_recomendacao(score_viabilidade, quilometragem_mensal, preco_gasolina, economia_anual, tempo_retorno, prioridade_usuario):
-   
+def gerar_recomendacao(
+    score_viabilidade,
+    quilometragem_mensal,
+    preco_gasolina,
+    economia_anual,
+    tempo_retorno,
+    prioridade_usuario,
+):
 
     fatores = []
 
@@ -126,9 +163,9 @@ def gerar_recomendacao(score_viabilidade, quilometragem_mensal, preco_gasolina, 
         fatores.append("Economia anual significativa")
 
     if tempo_retorno == 0:
-      fatores.append("Não há investimento adicional em relação ao carro atual")
+        fatores.append("Não há investimento adicional em relação ao carro atual")
     elif tempo_retorno != -1 and tempo_retorno < 5:
-      fatores.append("Retorno rápido do investimento")
+        fatores.append("Retorno rápido do investimento")
 
     if score_viabilidade == 5:
         recomendacao = "Vale muito a pena realizar a troca."
@@ -139,22 +176,24 @@ def gerar_recomendacao(score_viabilidade, quilometragem_mensal, preco_gasolina, 
     elif score_viabilidade == 2:
         recomendacao = "A troca é pouco vantajosa financeiramente no período analisado."
     else:
-        recomendacao = "Não vale a pena realizar a troca, pois o investimento não se paga."
+        recomendacao = (
+            "Não vale a pena realizar a troca, pois o investimento não se paga."
+        )
 
     if prioridade_usuario == "economia":
-     perfil_usuario = "Econômico"
-     mensagem_prioridade = "Como sua prioridade é economia, o destaque da análise está na economia anual, no tempo de retorno e na redução de custos operacionais."
+        perfil_usuario = "Econômico"
+        mensagem_prioridade = "Como sua prioridade é economia, o destaque da análise está na economia anual, no tempo de retorno e na redução de custos operacionais."
     elif prioridade_usuario == "sustentabilidade":
-     perfil_usuario = "Sustentável"
-     mensagem_prioridade = "Como sua prioridade é sustentabilidade, o principal destaque está na redução de CO₂ e na equivalência ambiental em árvores."
+        perfil_usuario = "Sustentável"
+        mensagem_prioridade = "Como sua prioridade é sustentabilidade, o principal destaque está na redução de CO₂ e na equivalência ambiental em árvores."
     else:
-     perfil_usuario = "Equilibrado"
-     mensagem_prioridade = "Como sua prioridade é equilíbrio, a análise considera tanto os ganhos financeiros quanto os impactos ambientais positivos."
+        perfil_usuario = "Equilibrado"
+        mensagem_prioridade = "Como sua prioridade é equilíbrio, a análise considera tanto os ganhos financeiros quanto os impactos ambientais positivos."
 
     return {
         "score_viabilidade": score_viabilidade,
         "perfil_usuario": perfil_usuario,
         "recomendacao": recomendacao,
         "mensagem_prioridade": mensagem_prioridade,
-        "fatores": fatores
+        "fatores": fatores,
     }

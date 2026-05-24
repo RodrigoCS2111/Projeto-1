@@ -20,6 +20,7 @@ def salvar_simulacoes(simulacoes):
     with open(CAMINHO_ARQUIVO, "w", encoding="utf-8") as arquivo:
         json.dump(simulacoes, arquivo, indent=4, ensure_ascii=False)
 
+
 def adicionar_simulacao(simulacao):
     simulacoes = carregar_simulacoes()
 
@@ -34,6 +35,7 @@ def adicionar_simulacao(simulacao):
 
     salvar_simulacoes(simulacoes)
 
+
 def listar_simulacoes_usuario(email):
     simulacoes = carregar_simulacoes()
 
@@ -44,6 +46,7 @@ def listar_simulacoes_usuario(email):
             simulacoes_usuario.append(simulacao)
 
     return simulacoes_usuario
+
 
 def atualizar_simulacao(email, id_simulacao, nova_simulacao):
     simulacoes = carregar_simulacoes()
@@ -56,6 +59,7 @@ def atualizar_simulacao(email, id_simulacao, nova_simulacao):
             return True
 
     return False
+
 
 def excluir_simulacao(email, id_simulacao):
     simulacoes = carregar_simulacoes()

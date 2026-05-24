@@ -4,7 +4,7 @@ from calculos import calcular_combustao, calcular_eletrico, calcular_economia, c
 from dados import CARROS_ELETRICOS, FATOR_CO2_GASOLINA, FATOR_ARVORE
 from validacoes import ler_float, ler_int, ler_nome, ler_opcao, ler_email, ler_menu_opcoes
 from crud import adicionar_simulacao, listar_simulacoes_usuario, atualizar_simulacao, excluir_simulacao
-from interface import mostrar_titulo, pausar, loading, mostrar_resultado_simulacao, limpar_tela, formatar_moeda,formatar_score,formatar_numero, mostrar_boas_vindas, mostrar_progresso
+from interface import mostrar_titulo, pausar, loading, mostrar_resultado_simulacao, limpar_tela, formatar_moeda,formatar_score,formatar_numero, mostrar_boas_vindas, mostrar_progresso, mostrar_impacto_edicao
 
 def coletar_dados_veiculo():
     limpar_tela()
@@ -451,6 +451,11 @@ def editar_simulacao(usuario, simulacao_escolhida):
 
     id_simulacao = simulacao_escolhida["id"]
     dados = simulacao_escolhida["entradas"].copy()
+    simulacao_antiga = simulacao_escolhida
+
+    campo_alterado = ""
+    valor_antigo = None
+    valor_novo = None
 
     mostrar_titulo(f"EDITAR SIMULAÇÃO #{id_simulacao}")
 
@@ -487,66 +492,95 @@ def editar_simulacao(usuario, simulacao_escolhida):
     print("12 - ↩️ Cancelar edição")
 
     opcao = ler_opcao(
-      "Escolha uma opção: ",
-      ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+        "Escolha uma opção: ",
+        ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
     )
 
     if opcao == "1":
-     dados["preco_carro_atual"] = ler_float("Novo valor aproximado do carro atual (R$): ")
+        campo_alterado = "Preço do carro atual"
+        valor_antigo = dados["preco_carro_atual"]
+        dados["preco_carro_atual"] = ler_float("Novo valor aproximado do carro atual (R$): ")
+        valor_novo = dados["preco_carro_atual"]
 
     elif opcao == "2":
-     dados["preco_gasolina"] = ler_float("Novo preço da gasolina por litro (R$): ")
+        campo_alterado = "Preço da gasolina"
+        valor_antigo = dados["preco_gasolina"]
+        dados["preco_gasolina"] = ler_float("Novo preço da gasolina por litro (R$): ")
+        valor_novo = dados["preco_gasolina"]
 
     elif opcao == "3":
-     dados["preco_energia"] = ler_float("Novo preço da energia (R$/kWh): ")
+        campo_alterado = "Preço da energia"
+        valor_antigo = dados["preco_energia"]
+        dados["preco_energia"] = ler_float("Novo preço da energia (R$/kWh): ")
+        valor_novo = dados["preco_energia"]
 
     elif opcao == "4":
-     dados["quilometragem_mensal"] = ler_float(
-        "Quantos km, em média, você roda por mês com seu carro? "
-      )
+        campo_alterado = "Quilometragem mensal"
+        valor_antigo = dados["quilometragem_mensal"]
+        dados["quilometragem_mensal"] = ler_float("Quantos km, em média, você roda por mês com seu carro? ")
+        valor_novo = dados["quilometragem_mensal"]
 
     elif opcao == "5":
-     dados["consumo_km_l"] = ler_float(
-        "Quantos km seu carro faz com 1 litro de gasolina? ",
-        permitir_zero=False
-      )
+        campo_alterado = "Consumo do veículo atual"
+        valor_antigo = dados["consumo_km_l"]
+        dados["consumo_km_l"] = ler_float(
+            "Quantos km seu carro faz com 1 litro de gasolina? ",
+            permitir_zero=False,
+        )
+        valor_novo = dados["consumo_km_l"]
 
     elif opcao == "6":
-     dados["manutencao_anual_combustao"] = ler_float(
-        "Quanto você gasta, em média, por ano com manutenção? R$ "
-      )
+        campo_alterado = "Manutenção anual"
+        valor_antigo = dados["manutencao_anual_combustao"]
+        dados["manutencao_anual_combustao"] = ler_float("Quanto você gasta, em média, por ano com manutenção? R$ ")
+        valor_novo = dados["manutencao_anual_combustao"]
 
     elif opcao == "7":
-      dados["ipva"] = ler_float("Novo valor anual do IPVA (R$): ")
+        campo_alterado = "IPVA anual"
+        valor_antigo = dados["ipva"]
+        dados["ipva"] = ler_float("Novo valor anual do IPVA (R$): ")
+        valor_novo = dados["ipva"]
 
     elif opcao == "8":
-     dados["seguro"] = ler_float("Novo valor anual do seguro (R$): ")
+        campo_alterado = "Seguro anual"
+        valor_antigo = dados["seguro"]
+        dados["seguro"] = ler_float("Novo valor anual do seguro (R$): ")
+        valor_novo = dados["seguro"]
 
     elif opcao == "9":
-      dados["categoria_veiculo"] = ler_menu_opcoes(
-        "Qual categoria de carro elétrico você pretende comparar?",
-        {
-            "1": {"label": "Popular", "valor": "popular"},
-            "2": {"label": "SUV", "valor": "suv"},
-            "3": {"label": "Luxo", "valor": "luxo"}
-        }
-      )
+        campo_alterado = "Categoria do veículo elétrico"
+        valor_antigo = dados["categoria_veiculo"]
+        dados["categoria_veiculo"] = ler_menu_opcoes(
+            "Qual categoria de carro elétrico você pretende comparar?",
+            {
+                "1": {"label": "Popular", "valor": "popular"},
+                "2": {"label": "SUV", "valor": "suv"},
+                "3": {"label": "Luxo", "valor": "luxo"},
+            },
+        )
+        valor_novo = dados["categoria_veiculo"]
 
     elif opcao == "10":
-     dados["prioridade_usuario"] = ler_menu_opcoes(
-        "O que mais pesa na sua decisão?",
-        {
-            "1": {"label": "Economia", "valor": "economia"},
-            "2": {"label": "Sustentabilidade", "valor": "sustentabilidade"},
-            "3": {"label": "Equilíbrio", "valor": "equilibrio"}
-        }
-     )
+        campo_alterado = "Prioridade da simulação"
+        valor_antigo = dados["prioridade_usuario"]
+        dados["prioridade_usuario"] = ler_menu_opcoes(
+            "O que mais pesa na sua decisão?",
+            {
+                "1": {"label": "Economia", "valor": "economia"},
+                "2": {"label": "Sustentabilidade", "valor": "sustentabilidade"},
+                "3": {"label": "Equilíbrio", "valor": "equilibrio"},
+            },
+        )
+        valor_novo = dados["prioridade_usuario"]
 
     elif opcao == "11":
+        campo_alterado = "Quantidade de anos"
+        valor_antigo = dados["anos"]
         dados["anos"] = ler_int(
             "Por quantos anos você quer simular essa comparação? ",
-            permitir_zero=False
+            permitir_zero=False,
         )
+        valor_novo = dados["anos"]
 
     elif opcao == "12":
         print("\nEdição cancelada.")
@@ -557,13 +591,19 @@ def editar_simulacao(usuario, simulacao_escolhida):
     sucesso = atualizar_simulacao(
         email=usuario["email"],
         id_simulacao=id_simulacao,
-        nova_simulacao=nova_simulacao
+        nova_simulacao=nova_simulacao,
     )
 
     if sucesso:
         print("\n✅ Simulação atualizada com sucesso!")
-        loading("Recalculando sua análise")
-        mostrar_resultado_simulacao(nova_simulacao)
+        loading("Recalculando impacto da alteração")
+        mostrar_impacto_edicao(
+            simulacao_antiga,
+            nova_simulacao,
+            campo_alterado,
+            valor_antigo,
+            valor_novo,
+        )
     else:
         print("\n❌ Erro ao atualizar simulação.")
 
