@@ -4,7 +4,7 @@ from calculos import calcular_combustao, calcular_eletrico, calcular_economia, c
 from dados import CARROS_ELETRICOS, FATOR_CO2_GASOLINA, FATOR_ARVORE
 from validacoes import ler_float, ler_int, ler_nome, ler_opcao, ler_email, ler_menu_opcoes
 from crud import adicionar_simulacao, listar_simulacoes_usuario, atualizar_simulacao, excluir_simulacao
-from interface import mostrar_titulo, pausar, loading, mostrar_resultado_simulacao, limpar_tela, formatar_moeda, mostrar_boas_vindas, mostrar_progresso
+from interface import mostrar_titulo, pausar, loading, mostrar_resultado_simulacao, limpar_tela, formatar_moeda,formatar_score,formatar_numero, mostrar_boas_vindas, mostrar_progresso
 
 def coletar_dados_veiculo():
     limpar_tela()
@@ -215,9 +215,9 @@ def menu_principal(usuario):
             menu_historico(usuario)
 
         elif opcao == "3":
-            print("\nObrigado por usar o EcoTransition 🌱")
-            print("Até logo!")
-            break
+          if confirmar_saida():
+             mostrar_tela_saida()
+             break
 
 
 
@@ -312,18 +312,28 @@ def menu_historico(usuario):
         mostrar_titulo("HISTÓRICO DE SIMULAÇÕES")
 
         if not historico:
-            print("Nenhuma simulação encontrada.")
+            print("📭 Você ainda não possui simulações salvas.")
+            print("\nCrie uma nova simulação e salve o resultado para acompanhar seu histórico.")
             pausar()
             return
 
+        print(f"👋 {usuario['nome']}, aqui estão suas simulações salvas:\n")
+
         for simulacao in historico:
-            print(f"\nID: {simulacao['id']}")
-            print(f"Categoria: {simulacao['entradas']['categoria_veiculo']}")
-            print(f"Economia total: {formatar_moeda(simulacao['resultados']['economia']['economia_total'])}")
-            print(f"Score: {simulacao['resultados']['recomendacao']['score_viabilidade']}/5")
-            print(f"Perfil: {simulacao['resultados']['recomendacao']['perfil_usuario']}")
-            
-        print("\n1 - Gerenciar simulação")
+            entradas = simulacao["entradas"]
+            economia = simulacao["resultados"]["economia"]
+            recomendacao = simulacao["resultados"]["recomendacao"]
+
+            print("-" * 50)
+            print(f"📄 SIMULAÇÃO #{simulacao['id']}")
+            print(f"🚗 Categoria: {entradas['categoria_veiculo'].upper()}")
+            print(f"🎯 Perfil: {recomendacao['perfil_usuario']}")
+            print(f"💰 Economia total: {formatar_moeda(economia['economia_total'])}")
+            print(f"⭐ Viabilidade: {formatar_score(recomendacao['score_viabilidade'])}")
+            print("-" * 50)
+
+        print("\nO que deseja fazer agora?")
+        print("1 - Gerenciar uma simulação")
         print("2 - Voltar ao menu principal")
 
         escolha = ler_opcao("Escolha uma opção: ", ["1", "2"])
@@ -341,15 +351,16 @@ def menu_historico(usuario):
                 break
 
         if simulacao_escolhida is None:
-            print("\nSimulação não encontrada.")
+            print("\n⚠️ Simulação não encontrada.")
+            print("Verifique o ID informado e tente novamente.")
             pausar()
             continue
 
-        print("\n=== GERENCIAR SIMULAÇÃO ===")
-        print("1 - Ver detalhes")
-        print("2 - Editar simulação")
-        print("3 - Excluir simulação")
-        print("4 - Voltar ao histórico")
+        print("\nO que deseja fazer com esta simulação?\n")
+        print("1 - 📊 Ver detalhes completos")
+        print("2 - ✏️ Editar dados da simulação")
+        print("3 - 🗑️ Excluir simulação")
+        print("4 - ↩️ Voltar ao histórico")
 
         opcao = ler_opcao("Escolha uma opção: ", ["1", "2", "3", "4"])
 
@@ -362,20 +373,9 @@ def menu_historico(usuario):
             pausar()
 
         elif opcao == "3":
-            confirmar = ler_opcao("Tem certeza que deseja excluir? (s/n): ", ["s", "n"])
-
-            if confirmar == "s":
-                sucesso = excluir_simulacao(usuario["email"], id_simulacao)
-
-                if sucesso:
-                    print("\nSimulação excluída com sucesso!")
-                else:
-                    print("\nErro ao excluir simulação.")
-            else:
-                print("\nExclusão cancelada.")
-
-            pausar()
-
+          excluir_simulacao_interface(usuario, simulacao_escolhida)
+          pausar()
+         
         elif opcao == "4":
             continue
 
@@ -384,76 +384,171 @@ def menu_historico(usuario):
    
 def ver_detalhes_simulacao(simulacao):
     limpar_tela()
+
     entradas = simulacao["entradas"]
+    combustao = simulacao["resultados"]["combustao"]
+    eletrico = simulacao["resultados"]["eletrico"]
     economia = simulacao["resultados"]["economia"]
     impacto = simulacao["resultados"]["impacto_ambiental"]
     recomendacao = simulacao["resultados"]["recomendacao"]
 
-    mostrar_titulo("DETALHES DA SIMULAÇÃO")
-    print(f"Categoria: {entradas['categoria_veiculo']}")
+    mostrar_titulo(f"DETALHES DA SIMULAÇÃO #{simulacao['id']}")
+
+    print(f"⭐ Viabilidade: {formatar_score(recomendacao['score_viabilidade'])}")
+    print(f"🎯 Perfil da simulação: {recomendacao['perfil_usuario']}")
+    print(f"📌 Recomendação: {recomendacao['recomendacao']}")
+
+    print("\n" + "-" * 50)
+    print("🚗 DADOS DA SIMULAÇÃO")
+    print("-" * 50)
+    print(f"Categoria escolhida: {entradas['categoria_veiculo'].upper()}")
+    print(f"Prioridade informada: {entradas['prioridade_usuario']}")
     print(f"Quilometragem mensal: {entradas['quilometragem_mensal']} km")
-    print(f"Preço da gasolina: {formatar_moeda(entradas['preco_gasolina'])}")
-    print(f"Preço da energia: {formatar_moeda(entradas['preco_energia'])}")
     print(f"Anos simulados: {entradas['anos']}")
 
-    print("\n--- Resultados ---")
-    print(f"Economia anual: {formatar_moeda(economia['economia_anual'])}")
-    print(f"Economia total: {formatar_moeda(economia['economia_total'])}")
-    print(f"Economia real: {formatar_moeda(economia['economia_real'])}")
+    print("\n" + "-" * 50)
+    print("💰 COMPARAÇÃO FINANCEIRA")
+    print("-" * 50)
+    print(f"Custo anual com combustível: {formatar_moeda(combustao['custo_combustivel_anual'])}")
+    print(f"Custo anual com energia: {formatar_moeda(eletrico['custo_eletrico_anual'])}")
+    print(f"Economia anual estimada: {formatar_moeda(economia['economia_anual'])}")
+    print(f"Economia acumulada no período: {formatar_moeda(economia['economia_total'])}")
+    print(f"Saldo final considerando diferença dos veículos: {formatar_moeda(economia['economia_real'])}")
 
     if economia["tempo_retorno"] == -1:
-        print("Tempo de retorno: não se paga")
+        print("Tempo de retorno: não se paga no período analisado")
+    elif economia["tempo_retorno"] == 0:
+        print("Tempo de retorno: imediato, pois não há investimento adicional")
     else:
-        print(f"Tempo de retorno: {economia['tempo_retorno']:.1f} anos")
+        print(f"Tempo de retorno: aproximadamente {economia['tempo_retorno']:.1f} anos")
 
-    print(f"CO₂ evitado: {impacto['economia_co2']:.2f} kg")
-    print(f"Equivalência em árvores: {impacto['equivalencia_arvores']:.0f}")
-    print(f"Score: {recomendacao['score_viabilidade']}/5")
-    print(f"Perfil da simulação: {recomendacao['perfil_usuario']}")
-    print(f"Prioridade informada: {entradas['prioridade_usuario']}")
-    print(f"Recomendação: {recomendacao['recomendacao']}")
-    print(f"Mensagem personalizada: {recomendacao['mensagem_prioridade']}")
+    print("\n" + "-" * 50)
+    print("🌱 IMPACTO AMBIENTAL")
+    print("-" * 50)
+    print(f"CO₂ evitado: {formatar_numero(impacto['economia_co2'])} kg")
+    print(f"Equivalência ambiental: aproximadamente {impacto['equivalencia_arvores']:.0f} árvores")
+
+    print("\n" + "-" * 50)
+    print("📌 FATORES DA RECOMENDAÇÃO")
+    print("-" * 50)
+
+    if recomendacao["fatores"]:
+        for fator in recomendacao["fatores"]:
+            print(f"• {fator}")
+    else:
+        print("• Nenhum fator de destaque identificado.")
+
+    print("\n" + "-" * 50)
+    print("🧠 INTERPRETAÇÃO")
+    print("-" * 50)
+    print(recomendacao["mensagem_prioridade"])
 
 
 
 
 def editar_simulacao(usuario, simulacao_escolhida):
     limpar_tela()
-    id_simulacao = simulacao_escolhida["id"]
 
+    id_simulacao = simulacao_escolhida["id"]
     dados = simulacao_escolhida["entradas"].copy()
 
-    mostrar_titulo("EDITAR SIMULAÇÃO")
+    mostrar_titulo(f"EDITAR SIMULAÇÃO #{id_simulacao}")
 
-    print("\nO que deseja alterar?")
-    print("1 - Preço da gasolina")
-    print("2 - Preço da energia")
-    print("3 - Quilometragem mensal")
-    print("4 - Categoria do veículo")
-    print("5 - Quantidade de anos")
-    print("6 - Cancelar")
+    print("Você pode alterar uma informação da simulação por vez.")
+    print("Após a alteração, os resultados serão recalculados automaticamente.\n")
 
-    opcao = ler_opcao("Escolha uma opção: ", ["1", "2", "3", "4", "5", "6"])
+    print("-" * 50)
+    print("📌 DADOS ATUAIS")
+    print("-" * 50)
+    print(f"Preço do carro atual: {formatar_moeda(dados['preco_carro_atual'])}")
+    print(f"Preço da gasolina: {formatar_moeda(dados['preco_gasolina'])}")
+    print(f"Preço da energia: {formatar_moeda(dados['preco_energia'])}")
+    print(f"Quilometragem mensal: {dados['quilometragem_mensal']} km")
+    print(f"Consumo do veículo atual: {dados['consumo_km_l']} km/L")
+    print(f"Manutenção anual: {formatar_moeda(dados['manutencao_anual_combustao'])}")
+    print(f"IPVA anual: {formatar_moeda(dados['ipva'])}")
+    print(f"Seguro anual: {formatar_moeda(dados['seguro'])}")
+    print(f"Categoria do veículo: {dados['categoria_veiculo'].upper()}")
+    print(f"Prioridade: {dados['prioridade_usuario']}")
+    print(f"Anos simulados: {dados['anos']}")
+
+    print("\nO que deseja alterar?\n")
+    print("1 - 🚗 Preço do carro atual")
+    print("2 - ⛽ Preço da gasolina")
+    print("3 - ⚡ Preço da energia")
+    print("4 - 📍 Quilometragem mensal")
+    print("5 - ⛽ Consumo do veículo atual")
+    print("6 - 🛠️ Manutenção anual")
+    print("7 - 💸 IPVA anual")
+    print("8 - 🛡️ Seguro anual")
+    print("9 - 🚙 Categoria do veículo elétrico")
+    print("10 - 🎯 Prioridade da simulação")
+    print("11 - 📅 Quantidade de anos")
+    print("12 - ↩️ Cancelar edição")
+
+    opcao = ler_opcao(
+      "Escolha uma opção: ",
+      ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+    )
 
     if opcao == "1":
-        dados["preco_gasolina"] = ler_float("Novo preço da gasolina (R$/L): ")
+     dados["preco_carro_atual"] = ler_float("Novo valor aproximado do carro atual (R$): ")
 
     elif opcao == "2":
-        dados["preco_energia"] = ler_float("Novo preço da energia (R$/kWh): ")
+     dados["preco_gasolina"] = ler_float("Novo preço da gasolina por litro (R$): ")
 
     elif opcao == "3":
-        dados["quilometragem_mensal"] = ler_float("Nova quilometragem mensal (km): ")
+     dados["preco_energia"] = ler_float("Novo preço da energia (R$/kWh): ")
 
     elif opcao == "4":
-        dados["categoria_veiculo"] = ler_opcao(
-            "Nova categoria (popular/suv/luxo): ",
-            ["popular", "suv", "luxo"]
-        )
+     dados["quilometragem_mensal"] = ler_float(
+        "Quantos km, em média, você roda por mês com seu carro? "
+      )
 
     elif opcao == "5":
-        dados["anos"] = ler_int("Nova quantidade de anos para simulação: ", permitir_zero=False)
+     dados["consumo_km_l"] = ler_float(
+        "Quantos km seu carro faz com 1 litro de gasolina? ",
+        permitir_zero=False
+      )
 
     elif opcao == "6":
+     dados["manutencao_anual_combustao"] = ler_float(
+        "Quanto você gasta, em média, por ano com manutenção? R$ "
+      )
+
+    elif opcao == "7":
+      dados["ipva"] = ler_float("Novo valor anual do IPVA (R$): ")
+
+    elif opcao == "8":
+     dados["seguro"] = ler_float("Novo valor anual do seguro (R$): ")
+
+    elif opcao == "9":
+      dados["categoria_veiculo"] = ler_menu_opcoes(
+        "Qual categoria de carro elétrico você pretende comparar?",
+        {
+            "1": {"label": "Popular", "valor": "popular"},
+            "2": {"label": "SUV", "valor": "suv"},
+            "3": {"label": "Luxo", "valor": "luxo"}
+        }
+      )
+
+    elif opcao == "10":
+     dados["prioridade_usuario"] = ler_menu_opcoes(
+        "O que mais pesa na sua decisão?",
+        {
+            "1": {"label": "Economia", "valor": "economia"},
+            "2": {"label": "Sustentabilidade", "valor": "sustentabilidade"},
+            "3": {"label": "Equilíbrio", "valor": "equilibrio"}
+        }
+     )
+
+    elif opcao == "11":
+        dados["anos"] = ler_int(
+            "Por quantos anos você quer simular essa comparação? ",
+            permitir_zero=False
+        )
+
+    elif opcao == "12":
         print("\nEdição cancelada.")
         return
 
@@ -466,11 +561,87 @@ def editar_simulacao(usuario, simulacao_escolhida):
     )
 
     if sucesso:
-     print("\nSimulação atualizada com sucesso!")
-     loading("Recalculando sua análise")
-     mostrar_resultado_simulacao(nova_simulacao)
+        print("\n✅ Simulação atualizada com sucesso!")
+        loading("Recalculando sua análise")
+        mostrar_resultado_simulacao(nova_simulacao)
     else:
-     print("\nErro ao atualizar simulação.")
+        print("\n❌ Erro ao atualizar simulação.")
+
+
+
+
+def excluir_simulacao_interface(usuario, simulacao_escolhida):
+    limpar_tela()
+
+    id_simulacao = simulacao_escolhida["id"]
+    entradas = simulacao_escolhida["entradas"]
+    economia = simulacao_escolhida["resultados"]["economia"]
+    recomendacao = simulacao_escolhida["resultados"]["recomendacao"]
+
+    mostrar_titulo(f"EXCLUIR SIMULAÇÃO #{id_simulacao}")
+
+    print("⚠️ Atenção: esta ação não poderá ser desfeita.\n")
+    print("Você está prestes a excluir a seguinte simulação:\n")
+
+    print("-" * 50)
+    print(f"🚗 Categoria: {entradas['categoria_veiculo'].upper()}")
+    print(f"🎯 Perfil: {recomendacao['perfil_usuario']}")
+    print(f"💰 Economia total: {formatar_moeda(economia['economia_total'])}")
+    print(f"⭐ Viabilidade: {formatar_score(recomendacao['score_viabilidade'])}")
+    print("-" * 50)
+
+    print("\nDeseja realmente excluir esta simulação?")
+    print("1 - Sim, excluir definitivamente")
+    print("2 - Não, voltar ao histórico")
+
+    opcao = ler_opcao("Escolha uma opção: ", ["1", "2"])
+
+    if opcao == "1":
+        sucesso = excluir_simulacao(usuario["email"], id_simulacao)
+
+        if sucesso:
+            print("\n✅ Simulação excluída com sucesso!")
+        else:
+            print("\n❌ Erro ao excluir simulação.")
+    else:
+        print("\nExclusão cancelada.")
+
+
+
+        
+def confirmar_saida():
+    limpar_tela()
+    mostrar_titulo("ENCERRAR ECOTRANSITION")
+
+    print("Você está prestes a sair do sistema.\n")
+    print("Deseja realmente encerrar agora?")
+    print("1 - Sim, sair")
+    print("2 - Não, voltar ao menu")
+
+    opcao = ler_opcao("Escolha uma opção: ", ["1", "2"])
+
+    return opcao == "1"
+
+
+
+
+def mostrar_tela_saida():
+    limpar_tela()
+
+    print("=" * 60)
+    print("ECOTRANSITION 🌱⚡".center(60))
+    print("=" * 60)
+
+    print("\nObrigado por usar o EcoTransition!\n")
+    print("Esperamos que a análise tenha ajudado você")
+    print("a tomar uma decisão mais consciente sobre")
+    print("mobilidade, economia e sustentabilidade.\n")
+
+    print("Pequenas escolhas hoje podem gerar")
+    print("grandes impactos amanhã. 🌱\n")
+
+
+
 
 if __name__ == "__main__":
     mostrar_boas_vindas()

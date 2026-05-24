@@ -1,1 +1,123 @@
-[]
+[
+    {
+        "usuario": {
+            "nome": "Edu",
+            "email": "edu@gmail.com"
+        },
+        "entradas": {
+            "preco_carro_atual": 60000.0,
+            "consumo_km_l": 11.0,
+            "manutencao_anual_combustao": 870.0,
+            "preco_gasolina": 6.8,
+            "ipva": 2600.0,
+            "seguro": 1400.0,
+            "quilometragem_mensal": 1340.0,
+            "anos": 5,
+            "preco_energia": 0.85,
+            "categoria_veiculo": "popular",
+            "prioridade_usuario": "economia"
+        },
+        "resultados": {
+            "combustao": {
+                "litros_por_mes": 121.81818181818181,
+                "custo_combustivel_mensal": 828.3636363636363,
+                "custo_combustivel_anual": 9940.363636363636,
+                "custo_total_combustao": 74051.81818181818
+            },
+            "eletrico": {
+                "consumo_kwh_categoria": 0.12,
+                "preco_carro_eletrico": 120000.0,
+                "manutencao_anual_eletrico": 1500.0,
+                "custo_eletrico_mensal": 136.67999999999998,
+                "custo_eletrico_anual": 1640.1599999999999,
+                "custo_total_eletrico": 35700.8
+            },
+            "economia": {
+                "economia_abastecimento_anual": 8300.203636363636,
+                "economia_manutencao_anual": -630.0,
+                "diferenca_investimento": 60000.0,
+                "economia_total": 38351.01818181817,
+                "economia_real": -21648.981818181826,
+                "economia_anual": 7670.203636363634,
+                "tempo_retorno": 7.822478104172654
+            },
+            "impacto_ambiental": {
+                "co2_combustao_total": 16810.90909090909,
+                "co2_eletrico_total": 0,
+                "economia_co2": 16810.90909090909,
+                "equivalencia_arvores": 800.5194805194803
+            },
+            "recomendacao": {
+                "score_viabilidade": 3,
+                "perfil_usuario": "Econômico",
+                "recomendacao": "Pode valer a pena, mas exige atenção ao tempo de retorno.",
+                "mensagem_prioridade": "Como sua prioridade é economia, o destaque da análise está na economia anual, no tempo de retorno e na redução de custos operacionais.",
+                "fatores": [
+                    "Alto custo da gasolina",
+                    "Economia anual significativa"
+                ]
+            }
+        },
+        "id": 1
+    },
+    {
+        "usuario": {
+            "nome": "Dudu",
+            "email": "du@gmail.com"
+        },
+        "entradas": {
+            "preco_carro_atual": 140000.0,
+            "consumo_km_l": 13.5,
+            "manutencao_anual_combustao": 1300.0,
+            "preco_gasolina": 7.1,
+            "ipva": 1222.0,
+            "seguro": 1222.0,
+            "quilometragem_mensal": 1222.0,
+            "anos": 12,
+            "preco_energia": 0.85,
+            "categoria_veiculo": "luxo",
+            "prioridade_usuario": "economia"
+        },
+        "resultados": {
+            "combustao": {
+                "litros_por_mes": 90.51851851851852,
+                "custo_combustivel_mensal": 642.6814814814815,
+                "custo_combustivel_anual": 7712.177777777777,
+                "custo_total_combustao": 137474.13333333333
+            },
+            "eletrico": {
+                "consumo_kwh_categoria": 0.25,
+                "preco_carro_eletrico": 300000.0,
+                "manutencao_anual_eletrico": 4000.0,
+                "custo_eletrico_mensal": 259.675,
+                "custo_eletrico_anual": 3116.1000000000004,
+                "custo_total_eletrico": 114721.20000000001
+            },
+            "economia": {
+                "economia_abastecimento_anual": 4596.077777777777,
+                "economia_manutencao_anual": -2700.0,
+                "diferenca_investimento": 160000.0,
+                "economia_total": 22752.93333333332,
+                "economia_real": -137247.06666666668,
+                "economia_anual": 1896.0777777777766,
+                "tempo_retorno": 84.38472402093215
+            },
+            "impacto_ambiental": {
+                "co2_combustao_total": 29979.733333333334,
+                "co2_eletrico_total": 0,
+                "economia_co2": 29979.733333333334,
+                "equivalencia_arvores": 1427.6063492063493
+            },
+            "recomendacao": {
+                "score_viabilidade": 2,
+                "perfil_usuario": "Econômico",
+                "recomendacao": "A troca é pouco vantajosa financeiramente no período analisado.",
+                "mensagem_prioridade": "Como sua prioridade é economia, o destaque da análise está na economia anual, no tempo de retorno e na redução de custos operacionais.",
+                "fatores": [
+                    "Alto custo da gasolina"
+                ]
+            }
+        },
+        "id": 2
+    }
+]
