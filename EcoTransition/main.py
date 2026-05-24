@@ -2,7 +2,7 @@
 # Responsável por iniciar o programa, exibir menus e conectar todas as funcionalidades.
 from calculos import calcular_combustao, calcular_eletrico, calcular_economia, calcular_impacto_ambiental, calcular_score, gerar_recomendacao
 from dados import CARROS_ELETRICOS, FATOR_CO2_GASOLINA, FATOR_ARVORE
-from validacoes import ler_float, ler_int, ler_nome, ler_opcao, ler_email
+from validacoes import ler_float, ler_int, ler_nome, ler_opcao, ler_email, ler_menu_opcoes
 from crud import adicionar_simulacao, listar_simulacoes_usuario, atualizar_simulacao, excluir_simulacao
 from interface import mostrar_titulo, pausar, loading, mostrar_resultado_simulacao, limpar_tela, formatar_moeda, mostrar_boas_vindas, mostrar_progresso
 
@@ -28,7 +28,7 @@ def coletar_custos_fixos():
     mostrar_titulo("NOVA SIMULAÇÃO")
     mostrar_progresso(2, 4, "💰 Custos fixos")
 
-    preco_gasolina = ler_float("Preço da gasolina (R$/L): ")
+    preco_gasolina = ler_float("Preço do combustível (R$/L): ")
     ipva = ler_float("IPVA anual (R$): ")
     seguro = ler_float("Seguro anual (R$): ")
 
@@ -75,16 +75,23 @@ def coletar_preferencias():
     mostrar_titulo("NOVA SIMULAÇÃO")
     mostrar_progresso(4, 4, "🎯 Preferências da simulação")
 
-    categoria_veiculo = ler_opcao(
-        "Categoria do veículo elétrico desejado (popular/suv/luxo): ",
-        ["popular", "suv", "luxo"]
+    categoria_veiculo = ler_menu_opcoes(
+    "Qual categoria de carro elétrico você pretende comparar?",
+    {
+        "1": {"label": "Popular", "valor": "popular"},
+        "2": {"label": "SUV", "valor": "suv"},
+        "3": {"label": "Luxo", "valor": "luxo"}
+    }
     )
 
-    prioridade_usuario = ler_opcao(
-        "Sua prioridade (economia/sustentabilidade/equilibrio): ",
-        ["economia", "sustentabilidade", "equilibrio"]
+    prioridade_usuario = ler_menu_opcoes(
+    "O que mais pesa na sua decisão?",
+    {
+        "1": {"label": "Economia", "valor": "economia"},
+        "2": {"label": "Sustentabilidade", "valor": "sustentabilidade"},
+        "3": {"label": "Equilíbrio", "valor": "equilibrio"}
+    }
     )
-
     return {
         "categoria_veiculo": categoria_veiculo,
         "prioridade_usuario": prioridade_usuario

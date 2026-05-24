@@ -96,3 +96,20 @@ def ler_opcao(mensagem, opcoes_validas):
             return opcao
         else:
             print(f"Opção inválida. Escolha uma das opções: {', '.join(opcoes_validas)}")
+            
+
+
+
+def ler_menu_opcoes(titulo, opcoes):
+    print(f"\n{titulo}\n")
+
+    for numero, texto in opcoes.items():
+        print(f"{numero} - {texto['label']}")
+
+    while True:
+        escolha = input("\nEscolha uma opção: ").strip()
+
+        if escolha in opcoes:
+            return opcoes[escolha]["valor"]
+
+        print("Opção inválida. Digite o número correspondente à opção desejada.")
