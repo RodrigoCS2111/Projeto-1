@@ -30,38 +30,33 @@ def calcular_combustao(
     }
 
 
-def calcular_eletrico(
-    quilometragem_mensal,
-    preco_energia,
-    categoria_veiculo,
-    ipva,
-    seguro,
-    anos,
-    carros_eletricos,
-):
+def calcular_eletrico(quilometragem_mensal,preco_energia,categoria_veiculo,modelo_veiculo,anos,carros_eletricos):
+    dados_modelo = carros_eletricos[categoria_veiculo][modelo_veiculo]
 
-    dados_categoria = carros_eletricos[categoria_veiculo]
-
-    consumo_kwh_categoria = dados_categoria["consumo_kwh_km"]
-    preco_carro_eletrico = dados_categoria["preco_medio"]
-    manutencao_anual_eletrico = dados_categoria["manutencao_anual"]
+    nome_modelo = dados_modelo["nome"]
+    consumo_kwh_categoria = dados_modelo["consumo_kwh_km"]
+    preco_carro_eletrico = dados_modelo["preco_medio"]
+    manutencao_anual_eletrico = dados_modelo["manutencao_anual"]
+    ipva_anual_eletrico = dados_modelo["ipva_anual_eletrico"]
+    seguro_anual_eletrico = dados_modelo["seguro_anual_eletrico"]
 
     custo_eletrico_mensal = quilometragem_mensal * consumo_kwh_categoria * preco_energia
-
     custo_eletrico_anual = custo_eletrico_mensal * 12
 
-    custo_total_eletrico = (
-        custo_eletrico_anual + ipva + seguro + manutencao_anual_eletrico
-    ) * anos
+    custo_total_eletrico = (custo_eletrico_anual + ipva_anual_eletrico + seguro_anual_eletrico + manutencao_anual_eletrico) * anos
 
     return {
+        "nome_modelo": nome_modelo,
         "consumo_kwh_categoria": consumo_kwh_categoria,
         "preco_carro_eletrico": preco_carro_eletrico,
         "manutencao_anual_eletrico": manutencao_anual_eletrico,
+        "ipva_anual_eletrico": ipva_anual_eletrico,
+        "seguro_anual_eletrico": seguro_anual_eletrico,
         "custo_eletrico_mensal": custo_eletrico_mensal,
         "custo_eletrico_anual": custo_eletrico_anual,
         "custo_total_eletrico": custo_total_eletrico,
     }
+
 
 
 def calcular_economia(
@@ -142,14 +137,7 @@ def calcular_score(tempo_retorno):
     return score_viabilidade
 
 
-def gerar_recomendacao(
-    score_viabilidade,
-    quilometragem_mensal,
-    preco_gasolina,
-    economia_anual,
-    tempo_retorno,
-    prioridade_usuario,
-):
+def gerar_recomendacao(score_viabilidade, quilometragem_mensal, preco_gasolina, economia_anual, tempo_retorno, prioridade_usuario,):
 
     fatores = []
 
@@ -189,11 +177,36 @@ def gerar_recomendacao(
     else:
         perfil_usuario = "Equilibrado"
         mensagem_prioridade = "Como sua prioridade é equilíbrio, a análise considera tanto os ganhos financeiros quanto os impactos ambientais positivos."
-
+    
+    modelo_sugerido = sugerir_modelo(prioridade_usuario)
+    
     return {
         "score_viabilidade": score_viabilidade,
         "perfil_usuario": perfil_usuario,
         "recomendacao": recomendacao,
         "mensagem_prioridade": mensagem_prioridade,
+        "modelo_sugerido": modelo_sugerido,
         "fatores": fatores,
     }
+
+
+
+
+def sugerir_modelo(prioridade_usuario):
+    if prioridade_usuario == "economia":
+        return {
+            "modelo": "BYD Dolphin Mini",
+            "motivo": "modelo compacto com menor custo de entrada e bom consumo energético.",
+        }
+
+    elif prioridade_usuario == "sustentabilidade":
+        return {
+            "modelo": "Volvo EX30 Core",
+            "motivo": "modelo elétrico eficiente e alinhado a uma proposta mais sustentável.",
+        }
+
+    else:
+        return {
+            "modelo": "BYD Yuan Pro",
+            "motivo": "modelo com bom equilíbrio entre preço, espaço, conforto e eficiência.",
+        }

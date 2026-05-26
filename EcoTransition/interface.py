@@ -128,6 +128,7 @@ def mostrar_resultado_simulacao(simulacao):
     print(gerar_headline(score).center(50))
 
     mostrar_subtitulo("💰 IMPACTO FINANCEIRO")
+    print(f"Modelo elétrico analisado: {eletrico['nome_modelo']}\n")
 
     print(f"Hoje com seu veículo atual:")
     print(f"{formatar_moeda(combustao['custo_combustivel_anual'])} por ano\n")
@@ -169,6 +170,13 @@ def mostrar_resultado_simulacao(simulacao):
 
     print(f"Perfil identificado: {recomendacao['perfil_usuario']}")
     print(f"{recomendacao['mensagem_prioridade']}")
+    
+    mostrar_subtitulo("🚗 MODELO SUGERIDO")
+
+    modelo_sugerido = recomendacao["modelo_sugerido"]
+
+    print(f"Modelo sugerido: {modelo_sugerido['modelo']}")
+    print(f"Motivo: {modelo_sugerido['motivo']}")
 
     mostrar_subtitulo("📌 POR QUE CHEGAMOS NESSA CONCLUSÃO")
 
@@ -246,3 +254,20 @@ def mostrar_impacto_edicao(
     print("\nScore:")
     print(f"Antes: {formatar_score(recomendacao_antiga['score_viabilidade'])}")
     print(f"Depois: {formatar_score(recomendacao_nova['score_viabilidade'])}")
+
+
+
+def mensagem_sucesso(texto):
+    print(f"\n✅ {texto}")
+    
+def mensagem_erro(texto):
+    print(f"\n❌ {texto}")
+    
+    
+    
+def mensagem_aviso(texto):
+    print(f"\n⚠️ {texto}")
+    
+
+def mensagem_info(texto):
+    print(f"\nℹ️ {texto}")

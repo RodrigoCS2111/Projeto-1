@@ -1,1 +1,72 @@
-[]
+[
+    {
+        "usuario": {
+            "nome": "Eduardo",
+            "email": "edu@gmail.com"
+        },
+        "entradas": {
+            "preco_carro_atual": 120000.0,
+            "consumo_km_l": 11.0,
+            "manutencao_anual_combustao": 1200.0,
+            "preco_gasolina": 7.1,
+            "ipva": 2000.0,
+            "seguro": 3000.0,
+            "quilometragem_mensal": 1200.0,
+            "anos": 10,
+            "preco_energia": 0.91,
+            "categoria_veiculo": "compactos",
+            "modelo_veiculo": "geely_ex2_pro",
+            "prioridade_usuario": "economia"
+        },
+        "resultados": {
+            "combustao": {
+                "litros_por_mes": 109.0909090909091,
+                "custo_combustivel_mensal": 774.5454545454545,
+                "custo_combustivel_anual": 9294.545454545454,
+                "custo_total_combustao": 154945.45454545453
+            },
+            "eletrico": {
+                "nome_modelo": "Geely EX2 Pro",
+                "consumo_kwh_categoria": 0.136,
+                "preco_carro_eletrico": 123800.0,
+                "manutencao_anual_eletrico": 1500.0,
+                "ipva_anual_eletrico": 0.0,
+                "seguro_anual_eletrico": 3500.0,
+                "custo_eletrico_mensal": 148.51200000000003,
+                "custo_eletrico_anual": 1782.1440000000002,
+                "custo_total_eletrico": 67821.44
+            },
+            "economia": {
+                "economia_abastecimento_anual": 7512.401454545454,
+                "economia_manutencao_anual": -300.0,
+                "diferenca_investimento": 3800.0,
+                "economia_total": 87124.01454545453,
+                "economia_real": 83324.01454545453,
+                "economia_anual": 8712.401454545452,
+                "tempo_retorno": 0.43615988310748194
+            },
+            "impacto_ambiental": {
+                "co2_combustao_total": 30109.09090909091,
+                "co2_eletrico_total": 0,
+                "economia_co2": 30109.09090909091,
+                "equivalencia_arvores": 1433.7662337662339
+            },
+            "recomendacao": {
+                "score_viabilidade": 5,
+                "perfil_usuario": "Econômico",
+                "recomendacao": "Vale muito a pena realizar a troca.",
+                "mensagem_prioridade": "Como sua prioridade é economia, o destaque da análise está na economia anual, no tempo de retorno e na redução de custos operacionais.",
+                "modelo_sugerido": {
+                    "modelo": "BYD Dolphin Mini",
+                    "motivo": "modelo compacto com menor custo de entrada e bom consumo energético."
+                },
+                "fatores": [
+                    "Alto custo da gasolina",
+                    "Economia anual significativa",
+                    "Retorno rápido do investimento"
+                ]
+            }
+        },
+        "id": 1
+    }
+]

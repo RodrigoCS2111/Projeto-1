@@ -18,7 +18,7 @@ def ler_float(mensagem, permitir_zero=True):
                 return valor
 
         except ValueError:
-            print("Entrada inválida. Digite um número válido.")
+            print("Entrada inválida. Digite um número válido. ex: 127500.5 ")
 
 
 def ler_int(mensagem, permitir_zero=True):
@@ -36,7 +36,7 @@ def ler_int(mensagem, permitir_zero=True):
                 return valor
 
         except ValueError:
-            print("Entrada inválida. Digite um número inteiro válido.")
+            print("Entrada inválida. Digite um número inteiro válido. ex: 8")
 
 
 def ler_texto(mensagem):

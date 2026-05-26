@@ -1,10 +1,10 @@
 # Arquivo principal do sistema.
 # Responsável por iniciar o programa, exibir menus e conectar todas as funcionalidades.
-from calculos import calcular_combustao, calcular_eletrico, calcular_economia, calcular_impacto_ambiental, calcular_score, gerar_recomendacao
+from calculos import calcular_combustao, calcular_eletrico, calcular_economia, calcular_impacto_ambiental, calcular_score, gerar_recomendacao, sugerir_modelo
 from dados import CARROS_ELETRICOS, FATOR_CO2_GASOLINA, FATOR_ARVORE
 from validacoes import ler_float, ler_int, ler_nome, ler_opcao, ler_email, ler_menu_opcoes
 from crud import adicionar_simulacao, listar_simulacoes_usuario, atualizar_simulacao, excluir_simulacao
-from interface import mostrar_titulo, pausar, loading, mostrar_resultado_simulacao, limpar_tela, formatar_moeda,formatar_score,formatar_numero, mostrar_boas_vindas, mostrar_progresso, mostrar_impacto_edicao
+from interface import mostrar_titulo, pausar, loading, mostrar_resultado_simulacao, limpar_tela, formatar_moeda,formatar_score,formatar_numero, mostrar_boas_vindas, mostrar_progresso, mostrar_impacto_edicao,mensagem_sucesso,mensagem_aviso, mensagem_erro, mensagem_info
 
 def coletar_dados_veiculo():
     limpar_tela()
@@ -76,26 +76,44 @@ def coletar_preferencias():
     mostrar_progresso(4, 4, "🎯 Preferências da simulação")
 
     categoria_veiculo = ler_menu_opcoes(
-    "Qual categoria de carro elétrico você pretende comparar?",
-    {
-        "1": {"label": "Popular", "valor": "popular"},
-        "2": {"label": "SUV", "valor": "suv"},
-        "3": {"label": "Luxo", "valor": "luxo"}
-    }
+        "Qual categoria de carro elétrico você pretende comparar?",
+        {
+            "1": {"label": "Compactos", "valor": "compactos"},
+            "2": {"label": "SUVs", "valor": "suvs"},
+            "3": {"label": "Premium", "valor": "premium"},
+        },
+    )
+
+    modelos_categoria = CARROS_ELETRICOS[categoria_veiculo]
+
+    opcoes_modelos = {}
+
+    for indice, codigo_modelo in enumerate(modelos_categoria, start=1):
+        opcoes_modelos[str(indice)] = {
+            "label": modelos_categoria[codigo_modelo]["nome"],
+            "valor": codigo_modelo,
+        }
+
+    modelo_veiculo = ler_menu_opcoes(
+        "Qual modelo de carro elétrico você deseja comparar?",
+        opcoes_modelos,
     )
 
     prioridade_usuario = ler_menu_opcoes(
-    "O que mais pesa na sua decisão?",
-    {
-        "1": {"label": "Economia", "valor": "economia"},
-        "2": {"label": "Sustentabilidade", "valor": "sustentabilidade"},
-        "3": {"label": "Equilíbrio", "valor": "equilibrio"}
-    }
+        "O que mais pesa na sua decisão?",
+        {
+            "1": {"label": "Economia", "valor": "economia"},
+            "2": {"label": "Sustentabilidade", "valor": "sustentabilidade"},
+            "3": {"label": "Equilíbrio", "valor": "equilibrio"},
+        },
     )
+
     return {
         "categoria_veiculo": categoria_veiculo,
-        "prioridade_usuario": prioridade_usuario
+        "modelo_veiculo": modelo_veiculo,
+        "prioridade_usuario": prioridade_usuario,
     }
+
 
 
 
@@ -119,9 +137,12 @@ def mostrar_resumo_dados(dados):
     print(f"Quilometragem mensal: {dados['quilometragem_mensal']} km")
     print(f"Anos simulados: {dados['anos']}")
     print(f"Preço da energia: {formatar_moeda(dados['preco_energia'])}/kWh")
-
+    
+    modelo = CARROS_ELETRICOS[dados["categoria_veiculo"]][dados["modelo_veiculo"]]["nome"]
+    
     print("\n🎯 Preferências")
     print(f"Categoria desejada: {dados['categoria_veiculo']}")
+    print(f"Modelo escolhido: {modelo}")
     print(f"Prioridade: {dados['prioridade_usuario']}")
 
     print("\n1 - Confirmar e calcular")
@@ -237,11 +258,11 @@ def processar_simulacao(usuario, dados):
         quilometragem_mensal=dados["quilometragem_mensal"],
         preco_energia=dados["preco_energia"],
         categoria_veiculo=dados["categoria_veiculo"],
-        ipva=dados["ipva"],
-        seguro=dados["seguro"],
+        modelo_veiculo=dados["modelo_veiculo"],
         anos=dados["anos"],
-        carros_eletricos=CARROS_ELETRICOS
+        carros_eletricos=CARROS_ELETRICOS,
     )
+
 
     economia = calcular_economia(
         custo_combustivel_anual=combustao["custo_combustivel_anual"],
@@ -326,7 +347,8 @@ def menu_historico(usuario):
 
             print("-" * 50)
             print(f"📄 SIMULAÇÃO #{simulacao['id']}")
-            print(f"🚗 Categoria: {entradas['categoria_veiculo'].upper()}")
+            print(f"🚗 Modelo: {simulacao['resultados']['eletrico']['nome_modelo']}")
+            print(f"📂 Categoria: {entradas['categoria_veiculo'].upper()}")
             print(f"🎯 Perfil: {recomendacao['perfil_usuario']}")
             print(f"💰 Economia total: {formatar_moeda(economia['economia_total'])}")
             print(f"⭐ Viabilidade: {formatar_score(recomendacao['score_viabilidade'])}")
@@ -402,6 +424,7 @@ def ver_detalhes_simulacao(simulacao):
     print("🚗 DADOS DA SIMULAÇÃO")
     print("-" * 50)
     print(f"Categoria escolhida: {entradas['categoria_veiculo'].upper()}")
+    print(f"Modelo escolhido: {eletrico['nome_modelo']}")
     print(f"Prioridade informada: {entradas['prioridade_usuario']}")
     print(f"Quilometragem mensal: {entradas['quilometragem_mensal']} km")
     print(f"Anos simulados: {entradas['anos']}")
@@ -474,6 +497,11 @@ def editar_simulacao(usuario, simulacao_escolhida):
     print(f"IPVA anual: {formatar_moeda(dados['ipva'])}")
     print(f"Seguro anual: {formatar_moeda(dados['seguro'])}")
     print(f"Categoria do veículo: {dados['categoria_veiculo'].upper()}")
+
+    if "modelo_veiculo" in dados:
+        nome_modelo = CARROS_ELETRICOS[dados["categoria_veiculo"]][dados["modelo_veiculo"]]["nome"]
+        print(f"Modelo do veículo elétrico: {nome_modelo}")
+
     print(f"Prioridade: {dados['prioridade_usuario']}")
     print(f"Anos simulados: {dados['anos']}")
 
@@ -486,7 +514,7 @@ def editar_simulacao(usuario, simulacao_escolhida):
     print("6 - 🛠️ Manutenção anual")
     print("7 - 💸 IPVA anual")
     print("8 - 🛡️ Seguro anual")
-    print("9 - 🚙 Categoria do veículo elétrico")
+    print("9 - 🚙 Categoria e modelo do veículo elétrico")
     print("10 - 🎯 Prioridade da simulação")
     print("11 - 📅 Quantidade de anos")
     print("12 - ↩️ Cancelar edição")
@@ -499,7 +527,9 @@ def editar_simulacao(usuario, simulacao_escolhida):
     if opcao == "1":
         campo_alterado = "Preço do carro atual"
         valor_antigo = dados["preco_carro_atual"]
-        dados["preco_carro_atual"] = ler_float("Novo valor aproximado do carro atual (R$): ")
+        dados["preco_carro_atual"] = ler_float(
+            "Novo valor aproximado do carro atual (R$): "
+        )
         valor_novo = dados["preco_carro_atual"]
 
     elif opcao == "2":
@@ -517,14 +547,16 @@ def editar_simulacao(usuario, simulacao_escolhida):
     elif opcao == "4":
         campo_alterado = "Quilometragem mensal"
         valor_antigo = dados["quilometragem_mensal"]
-        dados["quilometragem_mensal"] = ler_float("Quantos km, em média, você roda por mês com seu carro? ")
+        dados["quilometragem_mensal"] = ler_float(
+            "Quantos km, em média, você roda por mês com seu carro? "
+        )
         valor_novo = dados["quilometragem_mensal"]
 
     elif opcao == "5":
         campo_alterado = "Consumo do veículo atual"
         valor_antigo = dados["consumo_km_l"]
         dados["consumo_km_l"] = ler_float(
-            "Quantos km seu carro faz com 1 litro de Combustível? ",
+            "Quantos km seu carro faz com 1 litro de combustível? ",
             permitir_zero=False,
         )
         valor_novo = dados["consumo_km_l"]
@@ -532,7 +564,9 @@ def editar_simulacao(usuario, simulacao_escolhida):
     elif opcao == "6":
         campo_alterado = "Manutenção anual"
         valor_antigo = dados["manutencao_anual_combustao"]
-        dados["manutencao_anual_combustao"] = ler_float("Quanto você gasta, em média, por ano com manutenção? R$ ")
+        dados["manutencao_anual_combustao"] = ler_float(
+            "Quanto você gasta, em média, por ano com manutenção? R$ "
+        )
         valor_novo = dados["manutencao_anual_combustao"]
 
     elif opcao == "7":
@@ -548,17 +582,42 @@ def editar_simulacao(usuario, simulacao_escolhida):
         valor_novo = dados["seguro"]
 
     elif opcao == "9":
-        campo_alterado = "Categoria do veículo elétrico"
-        valor_antigo = dados["categoria_veiculo"]
+        campo_alterado = "Categoria e modelo do veículo elétrico"
+
+        modelo_antigo = dados.get("modelo_veiculo")
+        nome_modelo_antigo = "Modelo não informado"
+
+        if modelo_antigo:
+            nome_modelo_antigo = CARROS_ELETRICOS[dados["categoria_veiculo"]][modelo_antigo]["nome"]
+
+        valor_antigo = f"{dados['categoria_veiculo']} - {nome_modelo_antigo}"
+
         dados["categoria_veiculo"] = ler_menu_opcoes(
             "Qual categoria de carro elétrico você pretende comparar?",
             {
-                "1": {"label": "Popular", "valor": "popular"},
-                "2": {"label": "SUV", "valor": "suv"},
-                "3": {"label": "Luxo", "valor": "luxo"},
+                "1": {"label": "Compactos", "valor": "compactos"},
+                "2": {"label": "SUVs", "valor": "suvs"},
+                "3": {"label": "Premium", "valor": "premium"},
             },
         )
-        valor_novo = dados["categoria_veiculo"]
+
+        modelos_categoria = CARROS_ELETRICOS[dados["categoria_veiculo"]]
+
+        opcoes_modelos = {}
+
+        for indice, codigo_modelo in enumerate(modelos_categoria, start=1):
+            opcoes_modelos[str(indice)] = {
+                "label": modelos_categoria[codigo_modelo]["nome"],
+                "valor": codigo_modelo,
+            }
+
+        dados["modelo_veiculo"] = ler_menu_opcoes(
+            "Qual modelo de carro elétrico você deseja comparar?",
+            opcoes_modelos,
+        )
+
+        nome_modelo_novo = CARROS_ELETRICOS[dados["categoria_veiculo"]][dados["modelo_veiculo"]]["nome"]
+        valor_novo = f"{dados['categoria_veiculo']} - {nome_modelo_novo}"
 
     elif opcao == "10":
         campo_alterado = "Prioridade da simulação"
@@ -583,7 +642,7 @@ def editar_simulacao(usuario, simulacao_escolhida):
         valor_novo = dados["anos"]
 
     elif opcao == "12":
-        print("\nEdição cancelada.")
+        mensagem_aviso("Edição cancelada. Nenhuma alteração foi aplicada.")
         return
 
     nova_simulacao = processar_simulacao(usuario, dados)
@@ -595,7 +654,9 @@ def editar_simulacao(usuario, simulacao_escolhida):
     )
 
     if sucesso:
-        print("\n✅ Simulação atualizada com sucesso!")
+        mensagem_sucesso(
+            "Simulação atualizada com sucesso. Os resultados foram recalculados."
+        )
         loading("Recalculando impacto da alteração")
         mostrar_impacto_edicao(
             simulacao_antiga,
@@ -605,7 +666,8 @@ def editar_simulacao(usuario, simulacao_escolhida):
             valor_novo,
         )
     else:
-        print("\n❌ Erro ao atualizar simulação.")
+        mensagem_erro("Não foi possível atualizar a simulação. Tente novamente.")
+
 
 
 
