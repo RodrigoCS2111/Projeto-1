@@ -524,7 +524,7 @@ def editar_simulacao(usuario, simulacao_escolhida):
         campo_alterado = "Consumo do veículo atual"
         valor_antigo = dados["consumo_km_l"]
         dados["consumo_km_l"] = ler_float(
-            "Quantos km seu carro faz com 1 litro de gasolina? ",
+            "Quantos km seu carro faz com 1 litro de Combustível? ",
             permitir_zero=False,
         )
         valor_novo = dados["consumo_km_l"]
